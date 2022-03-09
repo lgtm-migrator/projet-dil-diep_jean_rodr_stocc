@@ -7,7 +7,7 @@ Les différentes tâches à effectuer sont les suivantes :
 - Rédiger le _README_
 - Ajouter une license.
 - Ajouter un code of conduct.
-- Créer un nouveau projet .[_Maven_][maven].
+- Créer un nouveau projet [_Maven_][maven].
 - Ajouter une dépendance [_Picocli_][picocli] au projet _Maven_.
 - Créer une classe `Main` Pour l'utilisation de _Picocli_.
 - Créer des sous-commandes avec _Picocli_ :
