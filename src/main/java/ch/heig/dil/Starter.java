@@ -6,7 +6,7 @@ import picocli.CommandLine.Command;
 import java.util.concurrent.Callable;
 
 @Command(name = "starter", version = "starter 1.0",
-         subcommands = New.class)
+         subcommands = {New.class, Build.class})
 public class Starter implements Callable<Integer>{
     public static void main(String... args) {
         int exitCode = new CommandLine(new Starter()).execute(args);
