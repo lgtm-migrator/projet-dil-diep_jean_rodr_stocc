@@ -9,6 +9,7 @@ import java.util.concurrent.Callable;
          subcommands = {
              New.class,
              Serve.class,
+             Build.class,
          })
 public class Starter implements Callable<Integer>{
     public static void main(String... args) {
