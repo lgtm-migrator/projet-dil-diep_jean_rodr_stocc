@@ -10,6 +10,7 @@ import java.util.concurrent.Callable;
              New.class,
              Serve.class,
              Build.class,
+             Clean.class
          })
 public class Starter implements Callable<Integer>{
     public static void main(String... args) {
