@@ -41,6 +41,14 @@ class YamlConvertorTest {
      * @throws IOException BufferWritter exception
      */
     private void writeFile(String filePath, LinkedList<String> lines) throws IOException {
+        try (BufferedWriter out = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(filePath), StandardCharsets.UTF_8
+        ))) {
+            for (String line : lines) {
+                out.write(line);
+                out.newLine();
+            }
+        }
     }
 
     /**
@@ -82,5 +90,11 @@ class YamlConvertorTest {
      */
     @Test
     public void readFile() throws IOException {
+        for (int i = 0; i < filesPath.size(); ++i) {
+            assertEquals(
+                    YamlConvertor.read(filesPath.get(i).toString()),
+                    filesMap.get(i)
+            );
+        }
     }
 }
