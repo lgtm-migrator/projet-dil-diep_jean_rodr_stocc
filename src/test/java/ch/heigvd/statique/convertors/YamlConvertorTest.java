@@ -1,10 +1,14 @@
 package ch.heigvd.statique.convertors;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -46,6 +50,17 @@ class YamlConvertorTest {
      */
     @BeforeAll
     public void createFiles() throws IOException {
+        root = Files.createTempDirectory("yamlConvertor_");
+
+        filesPath.add(Files.createFile(root.resolve("config1.yml")));
+        filesText.add(new LinkedList<>(defaultText));
+        filesMap.add(defaultMap);
+        writeFile(filesPath.getLast().toString(), filesText.getLast());
+
+        filesPath.add(Files.createFile(root.resolve("config1.yaml")));
+        filesText.add(new LinkedList<>(defaultText));
+        filesMap.add(defaultMap);
+        writeFile(filesPath.getLast().toString(), filesText.getLast());
     }
 
     /**
@@ -55,6 +70,9 @@ class YamlConvertorTest {
      */
     @AfterAll
     public void clearFiles() throws IOException {
+        for (Path path : filesPath) {
+            Files.deleteIfExists(path);
+        }
     }
 
     /**
