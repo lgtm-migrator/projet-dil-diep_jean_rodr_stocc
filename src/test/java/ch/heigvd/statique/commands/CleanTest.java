@@ -80,4 +80,16 @@ public class CleanTest {
         }
         tearDown();
     }
+
+    @Test
+    void cleanFolderNotExist() throws Exception {
+        setUp(true);
+        try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+            System.setErr(new PrintStream(output));
+
+            new CommandLine(new Clean()).execute(root.resolve("not_a_folder").toString());
+            assertTrue(output.toString().contains("Destination does not exists"));
+        }
+        tearDown();
+    }
 }
