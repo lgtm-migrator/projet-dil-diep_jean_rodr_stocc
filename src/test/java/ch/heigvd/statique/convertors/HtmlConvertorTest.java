@@ -25,7 +25,8 @@ public class HtmlConvertorTest {
             "# heading h1\n" +
             "## heading h2\n" +
             "### heading h3\n" +
-            "#### heading h4\n";
+            "#### heading h4\n"+
+            "---\n";
     private static final String defaultHTML =
             "<h1>heading h1</h1>\n" +
             "<h2>heading h2</h2>\n" +
@@ -78,7 +79,7 @@ public class HtmlConvertorTest {
     }
 
     /**
-     * Test file reading
+     * Test markdown reading
      *
      * @throws IOException File reading exception
      */
@@ -88,6 +89,20 @@ public class HtmlConvertorTest {
             assertEquals(
                     filesMDText.get(i),
                     HtmlConvertor.readMarkdown(filesPath.get(i).toString())
+            );
+        }
+    }
+
+    /**
+     * Test conversion markdown to HTML
+     *
+     */
+    @Test
+    void convertMarkdownToHTML(){
+        for (int i = 0; i < filesPath.size(); ++i) {
+            assertEquals(
+                    filesHtmlText.get(i),
+                    HtmlConvertor.convertMarkdownToHTML(filesMDText.get(i))
             );
         }
     }
