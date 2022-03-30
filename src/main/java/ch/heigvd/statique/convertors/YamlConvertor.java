@@ -2,7 +2,6 @@ package ch.heigvd.statique.convertors;
 
 import org.yaml.snakeyaml.Yaml;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
@@ -18,9 +17,7 @@ public class YamlConvertor {
      */
     public static Map<String, Object> read(String filepath) throws IOException {
         HashMap<String, Object> properties;
-        try (FileInputStream fis = new FileInputStream(new File(".").getCanonicalPath()
-                + File.separator + filepath
-        )) {
+        try (FileInputStream fis = new FileInputStream(filepath)) {
             Yaml yaml = new Yaml();
             properties = yaml.load(fis);
         }
