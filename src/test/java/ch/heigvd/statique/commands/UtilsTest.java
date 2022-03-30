@@ -13,6 +13,9 @@ class UtilsTest {
 
   Path root, dir1, dir2, dir3, file1, file2, file3;
 
+  /**
+   * Set up the directories to test the deletion.
+   */
   @BeforeEach
   void setUp() throws IOException {
     root = Files.createTempDirectory("statique_");
@@ -24,6 +27,9 @@ class UtilsTest {
     file3 = Files.createFile(dir3.resolve("file3"));
   }
 
+  /**
+   * Clean up the directories if needed.
+   */
   @AfterEach
   void tearDown() throws IOException {
     Files.deleteIfExists(file3);
@@ -35,6 +41,9 @@ class UtilsTest {
     Files.deleteIfExists(root);
   }
 
+  /**
+   * Test to clean the directory recursively.
+   */
   @Test
   public void deleteRecursive() throws IOException {
     Utils.deleteRecursive(root);

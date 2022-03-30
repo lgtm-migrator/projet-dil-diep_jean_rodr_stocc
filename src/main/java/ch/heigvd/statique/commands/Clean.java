@@ -21,6 +21,12 @@ public class Clean implements Callable<Integer> {
             return -1;
         }
 
+        // Verify that destination is a folder.
+        if (!Files.isDirectory(site)) {
+            System.err.println("Destination is not a folder");
+            return -1;
+        }
+
         // Get build folder.
         Path buildDir = site.resolve("build");
 

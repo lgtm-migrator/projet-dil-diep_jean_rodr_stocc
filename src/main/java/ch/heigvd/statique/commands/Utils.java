@@ -6,6 +6,10 @@ import java.nio.file.Path;
 
 public class Utils {
 
+  /**
+   * Delete given directory.
+   * @param directory Directory path to clean.
+   */
   public static void deleteRecursive(Path directory) throws IOException {
     FileUtils.deleteDirectory(directory.toFile());
   }
