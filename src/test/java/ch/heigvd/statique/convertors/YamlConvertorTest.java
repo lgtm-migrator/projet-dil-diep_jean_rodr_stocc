@@ -83,6 +83,8 @@ class YamlConvertorTest {
         for (Path path : filesPath) {
             Files.deleteIfExists(path);
         }
+    
+        Files.deleteIfExists(root);
     }
 
     /**
