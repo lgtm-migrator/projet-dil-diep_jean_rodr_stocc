@@ -25,13 +25,13 @@ public class HtmlConvertorTest {
             "# heading h1\n" +
             "## heading h2\n" +
             "### heading h3\n" +
-            "#### heading h4";
+            "#### heading h4\n";
     private static final String defaultHTML =
             "<h1>heading h1</h1>\n" +
             "<h2>heading h2</h2>\n" +
             "<h3>heading h3</h3>\n" +
             "<h4>heading h4</h4>\n" +
-            "<hr />";
+            "<hr />\n";
 
     /**
      * Writes inside a file

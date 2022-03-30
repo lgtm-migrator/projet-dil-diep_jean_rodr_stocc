@@ -3,7 +3,12 @@ import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 public class HtmlConvertor {
     /**
@@ -11,8 +16,15 @@ public class HtmlConvertor {
      * @param filepath File path
      * @return Lines for markdown file
      */
-    private String readMarkdown(String filepath){
-        return null;
+    static String readMarkdown(String filepath) throws IOException{
+        StringBuilder mdText = new StringBuilder();
+        try (BufferedReader fis = new BufferedReader(new InputStreamReader(new FileInputStream(filepath), StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = fis.readLine()) != null){
+                mdText.append(line).append('\n');
+            }
+        }
+        return mdText.toString();
     }
 
     /**
@@ -37,6 +49,6 @@ public class HtmlConvertor {
      */
     public void createHtmlFile(String filepath, String filename, String htmlLines)
             throws IOException {
-        
+
     }
 }
