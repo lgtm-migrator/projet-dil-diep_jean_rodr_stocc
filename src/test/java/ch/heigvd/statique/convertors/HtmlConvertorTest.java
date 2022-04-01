@@ -22,7 +22,6 @@ public class HtmlConvertorTest {
     private static final LinkedList<Path> filesHtmlPath = new LinkedList<>();
     private static final LinkedList<String> filesMDText = new LinkedList<>();
     private static final LinkedList<String> filesHtmlText = new LinkedList<>();
-    // Test from https://simplesolution.dev/java-parse-markdown-to-html-using-commonmark/
     private static final String defaultMD =
             "# heading h1\n" +
             "## heading h2\n" +

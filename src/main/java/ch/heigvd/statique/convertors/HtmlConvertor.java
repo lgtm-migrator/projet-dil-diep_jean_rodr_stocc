@@ -5,16 +5,20 @@ import org.commonmark.renderer.html.HtmlRenderer;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class HtmlConvertor {
     /**
-     * Read the markdown file and gets the lines
+     * Read a file and gets the lines
      * @param filepath File path
-     * @return Lines for markdown file
+     * @return Lines from file
      */
-    static String readMarkdown(String filepath) throws IOException{
+    public static String readFile(String filepath) throws IOException{
         StringBuilder mdText = new StringBuilder();
-        try (BufferedReader fis = new BufferedReader(new InputStreamReader(new FileInputStream(filepath), StandardCharsets.UTF_8))) {
+        try (BufferedReader fis = new BufferedReader(new InputStreamReader(
+                new FileInputStream(filepath), StandardCharsets.UTF_8)))
+        {
             String line;
             while ((line = fis.readLine()) != null){
                 mdText.append(line).append('\n');
@@ -37,14 +41,19 @@ public class HtmlConvertor {
     }
 
     /**
-     * Creates an HTML file with the given lines
-     * @param filepath File path
-     * @param filename File name (without extension)
-     * @param htmlLines HTML text using '\n' separators
-     * @throws IOException
+     * Creates an HTML file using a markdown file
+     * @param markdownPath Markdown file path (file should use '\n' separator)
+     * @param htmlPath Markdown file path
+     * @param htmlFileName HTML file name (with extension)
+     * @throws IOException Couldn't read or create file
      */
-    public void createHtmlFile(String filepath, String filename, String htmlLines)
+    public static void createHtmlFileFromMarkdown(String markdownPath, String htmlPath, String htmlFileName)
             throws IOException {
-
+        Files.createFile(Path.of(htmlPath + htmlFileName));
+        try (BufferedWriter out = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(htmlPath + htmlFileName), StandardCharsets.UTF_8)))
+        {
+            out.write(convertMarkdownToHTML(readFile(markdownPath)));
+        }
     }
 }
