@@ -4,6 +4,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import javax.swing.text.html.HTML;
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -17,22 +18,77 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class HtmlConvertorTest {
     private static Path root;
-    private static final LinkedList<Path> filesPath = new LinkedList<>();
+    private static final LinkedList<Path> filesMDPath = new LinkedList<>();
+    private static final LinkedList<Path> filesHtmlPath = new LinkedList<>();
     private static final LinkedList<String> filesMDText = new LinkedList<>();
     private static final LinkedList<String> filesHtmlText = new LinkedList<>();
     // Test from https://simplesolution.dev/java-parse-markdown-to-html-using-commonmark/
     private static final String defaultMD =
             "# heading h1\n" +
             "## heading h2\n" +
-            "### heading h3\n" +
-            "#### heading h4\n"+
-            "---\n";
+            "### heading h2\n" +
+            "#### heading h4\n" +
+            "---\n" +
+            "- 1st  list\n" +
+            "    - second list\n" +
+            "        - third list\n" +
+            "- end list \n" +
+            "---\n" +
+            "[<img src=\"https://mdn.github.io/beginner-html-site/images/firefox-icon.png\">](https://www.mozilla.org/)  \n" +
+            "[![Foo](https://mdn.github.io/beginner-html-site/images/firefox-icon.png)](https://www.mozilla.org/)  \n" +
+            "[Link to mozilla](https://www.mozilla.org/)\n" +
+            "I just love **bold text**.  \n" +
+            "I just love __bold text__.  \n" +
+            "Love**is**bold  \n" +
+            "A*cat*meow  \n" +
+            "1. First item\n" +
+            "3. Second item\n" +
+            "8. Third item\n" +
+            "    1. Indented item\n" +
+            "    9. Indented item\n" +
+            "10. Fourth item\n";
     private static final String defaultHTML =
             "<h1>heading h1</h1>\n" +
             "<h2>heading h2</h2>\n" +
-            "<h3>heading h3</h3>\n" +
+            "<h3>heading h2</h3>\n" +
             "<h4>heading h4</h4>\n" +
-            "<hr />\n";
+            "<hr />\n" +
+            "<ul>\n" +
+            "<li>1st  list\n" +
+            "<ul>\n" +
+            "<li>second list\n" +
+            "<ul>\n" +
+            "<li>third list</li>\n" +
+            "</ul>\n" +
+            "</li>\n" +
+            "</ul>\n" +
+            "</li>\n" +
+            "<li>end list</li>\n" +
+            "</ul>\n" +
+            "<hr />\n" +
+            "<p><a href=\"https://www.mozilla.org/\">" +
+                "<img src=\"https://mdn.github.io/beginner-html-site/images/firefox-icon.png\">" +
+                "</a><br />\n" +
+            "<a href=\"https://www.mozilla.org/\">" +
+                "<img src=\"https://mdn.github.io/beginner-html-site/images/firefox-icon.png\" " +
+                "alt=\"Foo\" /></a><br />\n" +
+            "<a href=\"https://www.mozilla.org/\">Link to mozilla</a><br />\n" +
+            "I just love <strong>bold text</strong>.<br />\n" +
+            "I just love <strong>bold text</strong>.<br />\n" +
+            "Love<strong>is</strong>bold<br />\n" +
+            "A<em>cat</em>meow</p>\n" +
+            "<ol>\n" +
+            "<li>First item</li>\n" +
+            "<li>Second item</li>\n" +
+            "<li>Third item\n" +
+            "<ol>\n" +
+            "<li>Indented item</li>\n" +
+            "<li>Indented item</li>\n" +
+            "</ol>\n" +
+            "</li>\n" +
+            "<li>Fourth item</li>\n" +
+            "</ol>\n";
+
 
     /**
      * Writes inside a file
@@ -57,11 +113,10 @@ public class HtmlConvertorTest {
     @BeforeAll
     static void createFiles() throws IOException {
         root = Files.createTempDirectory("htmlConvertor_");
-
-        filesPath.add(Files.createFile(root.resolve("test.md")));
+        filesMDPath.add(Files.createFile(root.resolve("test.md")));
         filesMDText.add(defaultMD);
         filesHtmlText.add(defaultHTML);
-        writeFile(filesPath.getLast().toString(), filesMDText.getLast());
+        writeFile(filesMDPath.getLast().toString(), filesMDText.getLast());
     }
 
     /**
@@ -71,7 +126,11 @@ public class HtmlConvertorTest {
      */
     @AfterAll
     static void clearFiles() throws IOException {
-        for (Path path : filesPath) {
+        for (Path path : filesMDPath) {
+            Files.deleteIfExists(path);
+        }
+
+        for (Path path : filesHtmlPath) {
             Files.deleteIfExists(path);
         }
 
@@ -85,21 +144,20 @@ public class HtmlConvertorTest {
      */
     @Test
     void readMarkdown() throws IOException {
-        for (int i = 0; i < filesPath.size(); ++i) {
+        for (int i = 0; i < filesMDPath.size(); ++i) {
             assertEquals(
                     filesMDText.get(i),
-                    HtmlConvertor.readMarkdown(filesPath.get(i).toString())
+                    HtmlConvertor.readMarkdown(filesMDPath.get(i).toString())
             );
         }
     }
 
     /**
      * Test conversion markdown to HTML
-     *
      */
     @Test
-    void convertMarkdownToHTML(){
-        for (int i = 0; i < filesPath.size(); ++i) {
+    void convertMarkdownToHTML() {
+        for (int i = 0; i < filesMDPath.size(); ++i) {
             assertEquals(
                     filesHtmlText.get(i),
                     HtmlConvertor.convertMarkdownToHTML(filesMDText.get(i))
