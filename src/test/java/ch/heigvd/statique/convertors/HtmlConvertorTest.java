@@ -147,7 +147,7 @@ public class HtmlConvertorTest {
         for (int i = 0; i < filesMDPath.size(); ++i) {
             assertEquals(
                     filesMDText.get(i),
-                    HtmlConvertor.readMarkdown(filesMDPath.get(i).toString())
+                    HtmlConvertor.readFile(filesMDPath.get(i).toString())
             );
         }
     }
@@ -161,6 +161,26 @@ public class HtmlConvertorTest {
             assertEquals(
                     filesHtmlText.get(i),
                     HtmlConvertor.convertMarkdownToHTML(filesMDText.get(i))
+            );
+        }
+    }
+
+
+    /**
+     * Test html file creation
+     *
+     * @throws IOException File creation exception
+     */
+    @Test
+    void htmlFileCreation() throws IOException {
+        for (int i = 0; i < filesMDPath.size(); ++i) {
+            String filepath =  root.toString(), filename = "test" + i + ".html";
+            HtmlConvertor.createHtmlFileFromMarkdown(filesMDPath.get(i).toString(),
+                    filepath, filename);
+            filesHtmlPath.add(Path.of(filepath + filename));
+            assertEquals(
+                    filesHtmlText.get(i),
+                    HtmlConvertor.readFile(String.valueOf(filesHtmlPath.get(i)))
             );
         }
     }
