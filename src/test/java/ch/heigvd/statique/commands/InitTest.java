@@ -19,7 +19,7 @@ public class InitTest {
     Path root, notADir, isAFile;
 
     /**
-     * Set up destination dir
+     * Set up destination dir and file
      *
      * @throws IOException
      */
@@ -30,12 +30,18 @@ public class InitTest {
         notADir = root.resolve("not_a_dir");
     }
 
+    /**
+     * Clean up temporary dir and file
+     */
     @AfterEach
     void tearDown() throws IOException {
         FileUtils.deleteDirectory(root.toFile());
         Files.deleteIfExists(isAFile);
     }
 
+    /**
+     * Test that the command create the needed files.
+     */
     @Test
     void inDirFilesCreated() {
         new CommandLine(new Init()).execute(root.toString());
@@ -47,6 +53,9 @@ public class InitTest {
         assertTrue(Files.isRegularFile(config));
     }
 
+    /**
+     * Test that the command create not empty files.
+     */
     @Test
     void filesContainsSomething() throws FileNotFoundException, IOException {
         new CommandLine(new Init()).execute(root.toString());
@@ -58,6 +67,10 @@ public class InitTest {
         assertNotEquals(config.toFile().length(), 0);
     }
 
+    /**
+     * Test that the command create the needed directory and files if the
+     * directory does not yet exist.
+     */
     @Test
     void inNotADirFilesCreated() {
         new CommandLine(new Init()).execute(notADir.toString());
@@ -70,21 +83,30 @@ public class InitTest {
         assertTrue(Files.isRegularFile(config));
     }
 
+    /**
+     * Test that the command fail if the destination is a file.
+     */
     @Test
     void inAFile() throws Exception {
         try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
             System.setErr(new PrintStream(output));
-            new CommandLine(new Init()).execute(isAFile.toString());
+            int codeError = new CommandLine(new Init()).execute(isAFile.toString());
 
+            assertEquals(codeError, -1);
             assertTrue(output.toString().contains("Destination exists and is not a folder."));
         }
     }
 
+    /**
+     * Test that the command does not create the config file if it already
+     * exists.
+     */
     @Test
     void fileIndexDoesExist() throws Exception {
         Path index = root.resolve("index.md");
         Path config = root.resolve("config.yaml");
 
+        // Create the empty file
         Files.createFile(index);
 
         try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
@@ -96,16 +118,22 @@ public class InitTest {
             assertTrue(Files.exists(index));
             assertTrue(Files.exists(config));
 
+            // Index must be empty but config must not.
             assertEquals(index.toFile().length(), 0);
             assertNotEquals(config.toFile().length(), 0);
         }
     }
 
+    /**
+     * Test that the command does not create the config file if it already
+     * exists.
+     */
     @Test
     void fileConfigDoesExist() throws Exception {
         Path index = root.resolve("index.md");
         Path config = root.resolve("config.yaml");
 
+        // Create the empty file
         Files.createFile(config);
 
         try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
@@ -117,16 +145,22 @@ public class InitTest {
             assertTrue(Files.exists(index));
             assertTrue(Files.exists(config));
 
+            // Config must be empty but index must not.
             assertNotEquals(index.toFile().length(), 0);
             assertEquals(config.toFile().length(), 0);
         }
     }
 
+    /**
+     * Test that the command does not create the index and config file if they
+     * already exist.
+     */
     @Test
     void fileIndexAndConfigDoesExist() throws Exception {
         Path index = root.resolve("index.md");
         Path config = root.resolve("config.yaml");
 
+        // Create the empty file
         Files.createFile(index);
         Files.createFile(config);
 
@@ -140,6 +174,7 @@ public class InitTest {
             assertTrue(Files.exists(index));
             assertTrue(Files.exists(config));
 
+            // Index and config must be empty.
             assertEquals(index.toFile().length(), 0);
             assertEquals(config.toFile().length(), 0);
         }
