@@ -150,7 +150,7 @@ public class BuildTest {
      */
     @AfterEach
     void tearDown() throws IOException {
-        //Utils.deleteRecursive(root);
+        Utils.deleteRecursive(root);
     }
 
     /**
@@ -159,6 +159,8 @@ public class BuildTest {
     @Test
     void build() throws IOException {
         new CommandLine(new Build()).execute(root.toString());
+
+
 
         // An HTML file should exist with the MD content
         for (int i = 0; i < filesHtmlPath.size(); ++i) {

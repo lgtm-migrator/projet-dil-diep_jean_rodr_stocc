@@ -27,6 +27,7 @@ public class Build implements Callable<Integer> {
         if(Files.exists(build)){
             Utils.deleteRecursive(build);
         }
+        Files.createDirectories(build);
 
         exploreAndBuild(site.toFile());
 
@@ -44,7 +45,9 @@ public class Build implements Callable<Integer> {
             fileBuilding(rootDirectory, "");
         }
         else if (rootDirectory.isDirectory()){
-            String directoryInBuild = rootDirectory.toPath().toString().substring(rootDirectory.toPath().toString().lastIndexOf(File.separator)+1);
+            String directoryInBuild = rootDirectory.toPath().toString().substring(
+                    rootDirectory.toPath().toString().lastIndexOf(File.separator)+1
+            );
             if(directoryInBuild.equals(
                     site.toString().substring(site.toString().lastIndexOf(File.separator) + 1)
                 ))
