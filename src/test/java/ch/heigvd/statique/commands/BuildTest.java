@@ -66,13 +66,13 @@ public class BuildTest {
                 "# Mon premier article\n" +
                 "## Mon sous-titre\n" +
                 "Le contenu de mon article.\n" +
-                "![Une image](./image.png)"
+                "![Une image](./image.png)\n"
         );
         filesHtmlText.add(
                 "<h1>Mon premier article</h1>\n" +
                 "<h2>Mon sous-titre</h2>\n" +
-                "<p>Le contenu de mon article.</p>\n" +
-                "<img src=\"./image.png\" alt=\"Une image\"/>"
+                "<p>Le contenu de mon article.\n" +
+                "<img src=\"./image.png\" alt=\"Une image\" /></p>\n"
         );
         writeFile(filesMDPath.getLast().toString(), filesMDText.getLast());
 
@@ -90,6 +90,7 @@ public class BuildTest {
             put("chiffre", 25);
         }});
         writeFile(filesYamlPath.getLast().toString(), filesYamlText.getLast());
+        filesYamlPath.set(filesYamlMap.size()-1, build.resolve("config.yaml"));
 
         Files.createDirectories(root.resolve("dossier"));
         filesMDPath.add(Files.createFile(root.resolve("dossier/page.md")));
@@ -163,7 +164,7 @@ public class BuildTest {
         for (int i = 0; i < filesHtmlPath.size(); ++i) {
             assertEquals(
                     filesHtmlText.get(i),
-                    getStringFromFile(filesHtmlPath.get(i))
+                    Files.readString(filesHtmlPath.get(i), StandardCharsets.UTF_8)
             );
         }
 
@@ -179,18 +180,5 @@ public class BuildTest {
         for(Path path : filesOtherPath){
             assertTrue(Files.exists(path));
         }
-    }
-
-    private String getStringFromFile(Path file) throws IOException{
-        StringBuilder fileText = new StringBuilder("");
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(
-                new FileInputStream(file.toString()), StandardCharsets.UTF_8
-        ))) {
-            String line;
-            while((line = in.readLine()) != null){
-                fileText.append(line);
-            }
-        }
-        return fileText.toString();
     }
 }
