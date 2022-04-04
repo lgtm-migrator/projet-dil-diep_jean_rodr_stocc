@@ -66,13 +66,13 @@ public class BuildTest {
                 "# Mon premier article\n" +
                 "## Mon sous-titre\n" +
                 "Le contenu de mon article.\n" +
-                "![Une image](./image.png)\n"
+                "![Une image](./dossier/image.png)\n"
         );
         filesHtmlText.add(
                 "<h1>Mon premier article</h1>\n" +
                 "<h2>Mon sous-titre</h2>\n" +
                 "<p>Le contenu de mon article.\n" +
-                "<img src=\"./image.png\" alt=\"Une image\" /></p>\n"
+                "<img src=\"./dossier/image.png\" alt=\"Une image\" /></p>\n"
         );
         writeFile(filesMDPath.getLast().toString(), filesMDText.getLast());
 
@@ -150,7 +150,7 @@ public class BuildTest {
      */
     @AfterEach
     void tearDown() throws IOException {
-        Utils.deleteRecursive(root);
+        //Utils.deleteRecursive(root);
     }
 
     /**
