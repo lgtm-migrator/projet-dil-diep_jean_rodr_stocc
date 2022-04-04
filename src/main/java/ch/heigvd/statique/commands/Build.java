@@ -10,7 +10,6 @@ import java.nio.file.Path;
 
 import ch.heigvd.statique.convertors.HtmlConvertor;
 import ch.heigvd.statique.convertors.YamlConvertor;
-import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 
@@ -24,9 +23,11 @@ public class Build implements Callable<Integer> {
 
     @Override
     public Integer call() throws IOException {
-        // TODO: clear if exist
-
         build = site.resolve("build");
+        // Delete directory of exists
+        if(Files.exists(build)){
+            Utils.deleteRecursive(build);
+        }
         Files.createDirectories(build);
 
         exploreAndBuild(site.toFile());
