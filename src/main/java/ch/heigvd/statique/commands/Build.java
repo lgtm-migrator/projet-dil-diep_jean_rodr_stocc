@@ -18,7 +18,6 @@ public class Build implements Callable<Integer> {
     @Parameters(paramLabel = "SITE", description = "The site to build")
     public Path site;
     private Path build;
-    private String directoryInBuild;
     public static Map<String, Object> config;
 
     @Override
@@ -28,7 +27,6 @@ public class Build implements Callable<Integer> {
         if(Files.exists(build)){
             Utils.deleteRecursive(build);
         }
-        Files.createDirectories(build);
 
         exploreAndBuild(site.toFile());
 
@@ -43,16 +41,25 @@ public class Build implements Callable<Integer> {
      */
     private void exploreAndBuild(File rootDirectory) throws IOException {
         if(rootDirectory.isFile()){
-            fileBuilding(rootDirectory);
+            fileBuilding(rootDirectory, "");
         }
         else if (rootDirectory.isDirectory()){
-            directoryInBuild = build.toString().substring(0, build.toString().lastIndexOf('/'));
-            Files.createDirectories(build.resolve(directoryInBuild));
+            String directoryInBuild = rootDirectory.toPath().toString().substring(rootDirectory.toPath().toString().lastIndexOf(File.separator)+1);
+            if(directoryInBuild.equals(
+                    site.toString().substring(site.toString().lastIndexOf(File.separator) + 1)
+                ))
+            {
+                directoryInBuild = "";
+            }
+            else{
+                Files.createDirectories(build.resolve(directoryInBuild));
+            }
+
 
             File[] files = rootDirectory.listFiles();
             for(int i = 0; i < Objects.requireNonNull(files).length; ++i){
                 if(files[i].isFile())
-                    fileBuilding(files[i]);
+                    fileBuilding(files[i], directoryInBuild);
                 else
                     exploreAndBuild(files[i]);
             }
@@ -63,13 +70,14 @@ public class Build implements Callable<Integer> {
     /**
      * Builds the given file
      * @param file file to build
+     * @param directoryInBuild directory inside build folder
      */
-    private void fileBuilding(File file) throws IOException {
+    private void fileBuilding(File file, String directoryInBuild) throws IOException {
         if(file.getName().contains(".md")){
             // Converts MD to HTML
             HtmlConvertor.createHtmlFileFromMarkdown(
                     file.getPath(),
-                    build.resolve(directoryInBuild).toString(),
+                    build.resolve(directoryInBuild) + File.separator,
                     file.getName().replaceFirst("\\.md", ".html")
             );
         } else if (file.getName().contains(".yaml") ||
@@ -78,7 +86,7 @@ public class Build implements Callable<Integer> {
             config = YamlConvertor.read(file.getPath());
         } else {
             // Copy path
-            Files.copy(file.toPath(), build);
+            Files.copy(file.toPath(), build.resolve(directoryInBuild).resolve(file.getName()));
         }
     }
 }
