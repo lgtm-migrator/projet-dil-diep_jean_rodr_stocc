@@ -53,6 +53,8 @@ public class Build implements Callable<Integer> {
                 ))
             {
                 directoryInBuild = "";
+            } else if(directoryInBuild.equals(build.toString().substring(build.toString().lastIndexOf(File.separator) + 1))){
+                return;
             }
             else{
                 Files.createDirectories(build.resolve(directoryInBuild));
