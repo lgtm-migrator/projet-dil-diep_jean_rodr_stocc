@@ -61,7 +61,7 @@ public class BuildTest {
         build = root.resolve("build");
 
         filesMDPath.add(Files.createFile(root.resolve("index.md")));
-        filesHtmlPath.add(Files.createFile(root.resolve("index.html")));
+        filesHtmlPath.add(build.resolve("index.html"));
         filesMDText.add(
                 "# Mon premier article\n" +
                 "## Mon sous-titre\n" +
@@ -90,11 +90,10 @@ public class BuildTest {
             put("chiffre", 25);
         }});
         writeFile(filesYamlPath.getLast().toString(), filesYamlText.getLast());
-        filesYamlPath.set(filesYamlPath.size()-1, build.resolve("config.yaml"));
 
         Files.createDirectories(root.resolve("dossier"));
         filesMDPath.add(Files.createFile(root.resolve("dossier/page.md")));
-        filesHtmlPath.add(Files.createFile(root.resolve("dossier/page.html")));
+        filesHtmlPath.add(build.resolve("dossier/page.html"));
         filesMDText.add(
                 "# Première page\n"
         );
