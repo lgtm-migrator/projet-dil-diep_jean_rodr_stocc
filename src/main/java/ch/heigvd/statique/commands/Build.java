@@ -19,7 +19,7 @@ public class Build implements Callable<Integer> {
     public Path site;
     private Path build;
     private String directoryInBuild;
-    public Map<String, Object> config;
+    public static Map<String, Object> config;
 
     @Override
     public Integer call() throws IOException {

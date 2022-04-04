@@ -1,6 +1,7 @@
 package ch.heigvd.statique.commands;
 
 import ch.heigvd.statique.convertors.HtmlConvertor;
+import ch.heigvd.statique.convertors.YamlConvertor;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -58,7 +59,9 @@ public class BuildTest {
     static void createFiles() throws IOException {
         root = Files.createTempDirectory("site");
         build = root.resolve("build");
+
         filesMDPath.add(Files.createFile(root.resolve("index.md")));
+        filesHtmlPath.add(Files.createFile(root.resolve("index.html")));
         filesMDText.add(
                 "# Mon premier article\n" +
                 "## Mon sous-titre\n" +
@@ -72,7 +75,6 @@ public class BuildTest {
                 "<img src=\"./image.png\" alt=\"Une image\"/>"
         );
         writeFile(filesMDPath.getLast().toString(), filesMDText.getLast());
-        filesMDPath.set(filesHtmlPath.size()-1, build.resolve("index.md"));
 
         filesYamlPath.add(Files.createFile(root.resolve("config.yaml")));
         filesYamlText.add(
@@ -88,9 +90,11 @@ public class BuildTest {
             put("chiffre", 25);
         }});
         writeFile(filesYamlPath.getLast().toString(), filesYamlText.getLast());
-        filesMDPath.set(filesHtmlPath.size()-1, build.resolve("config.yaml"));
+        filesYamlPath.set(filesYamlPath.size()-1, build.resolve("config.yaml"));
 
+        Files.createDirectories(root.resolve("dossier"));
         filesMDPath.add(Files.createFile(root.resolve("dossier/page.md")));
+        filesHtmlPath.add(Files.createFile(root.resolve("dossier/page.html")));
         filesMDText.add(
                 "# Première page\n"
         );
@@ -98,7 +102,6 @@ public class BuildTest {
                 "<h1>Première page</h1>\n"
         );
         writeFile(filesMDPath.getLast().toString(), filesMDText.getLast());
-        filesMDPath.set(filesHtmlPath.size()-1, build.resolve("dossier/page.md"));
 
         filesOtherPath.add(root.resolve("dossier/image.png"));
         imageGenerator(filesOtherPath.getLast().toString());
@@ -148,5 +151,47 @@ public class BuildTest {
     @AfterEach
     void tearDown() throws IOException {
         Utils.deleteRecursive(root);
+    }
+
+    /**
+     * Test build command
+     */
+    @Test
+    void build() throws IOException {
+        new CommandLine(new Build()).execute(root.toString());
+
+        // An HTML file should exist with the MD content
+        for (int i = 0; i < filesHtmlPath.size(); ++i) {
+            assertEquals(
+                    filesHtmlText.get(i),
+                    getStringFromFile(filesHtmlPath.get(i))
+            );
+        }
+
+        // Yaml config file shouldn't be copied
+        for (Path path : filesYamlPath) {
+            assertFalse(Files.exists(path));
+        }
+
+        // Yaml configuration should be retrieved
+        assertEquals(filesYamlMap.getLast(), Build.config);
+
+        // Other files should have been copied
+        for(Path path : filesOtherPath){
+            assertTrue(Files.exists(path));
+        }
+    }
+
+    private String getStringFromFile(Path file) throws IOException{
+        StringBuilder fileText = new StringBuilder("");
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(
+                new FileInputStream(file.toString()), StandardCharsets.UTF_8
+        ))) {
+            String line;
+            while((line = in.readLine()) != null){
+                fileText.append(line);
+            }
+        }
+        return fileText.toString();
     }
 }
