@@ -1,9 +1,7 @@
 package ch.heigvd.statique;
 
-import ch.heigvd.statique.commands.Build;
-import ch.heigvd.statique.commands.Clean;
-import ch.heigvd.statique.commands.Init;
-import ch.heigvd.statique.commands.Serve;
+import ch.heigvd.statique.commands.*;
+
 import java.util.concurrent.Callable;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -16,6 +14,7 @@ import picocli.CommandLine.Command;
       Clean.class,
       Build.class,
       Serve.class,
+      Version.class,
     })
 public class Statique implements Callable<Integer> {
 
