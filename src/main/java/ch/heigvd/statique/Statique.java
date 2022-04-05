@@ -1,9 +1,8 @@
 package ch.heigvd.statique;
 
-import ch.heigvd.statique.commands.Build;
-import ch.heigvd.statique.commands.Clean;
-import ch.heigvd.statique.commands.Init;
-import ch.heigvd.statique.commands.Serve;
+import ch.heigvd.statique.commands.*;
+
+import java.io.InputStream;
 import java.util.concurrent.Callable;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -18,6 +17,8 @@ import picocli.CommandLine.Command;
       Serve.class,
     })
 public class Statique implements Callable<Integer> {
+  @CommandLine.Option(names = "--version", description = "Show the generator's version in terminal")
+  boolean version;
 
   public static void main(String... args) {
     int exitCode = new CommandLine(new Statique()).execute(args);
@@ -28,7 +29,17 @@ public class Statique implements Callable<Integer> {
 
   @Override
   public Integer call() throws Exception {
-    CommandLine.usage(this, System.out);
+    if(version) {
+      try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("about/version.txt")) {
+        String v = new String(inputStream.readAllBytes());
+        System.out.println("Statique Version " + v);
+      } catch (Exception e){
+        System.err.println("Error, generator version is not provided.");
+        return -1;
+      }
+    } else {
+      CommandLine.usage(this, System.out);
+    }
     return 0;
   }
 }
