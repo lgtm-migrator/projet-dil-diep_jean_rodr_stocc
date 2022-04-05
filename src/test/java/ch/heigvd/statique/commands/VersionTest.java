@@ -1,4 +1,5 @@
 package ch.heigvd.statique.commands;
+import ch.heigvd.statique.Statique;
 import org.junit.jupiter.api.Test;
 import picocli.CommandLine;
 import java.io.ByteArrayOutputStream;
@@ -12,7 +13,7 @@ public class VersionTest {
     void show() throws IOException {
         try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
             System.setOut(new PrintStream(output));
-            new CommandLine(new Version()).execute();
+            new CommandLine(new Statique()).execute("--version");
             assertTrue((output.toString().contains("Statique Version v0.0.1")));
         }
     }
