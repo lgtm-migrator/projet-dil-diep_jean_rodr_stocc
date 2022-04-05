@@ -32,7 +32,7 @@ public class Statique implements Callable<Integer> {
   public Integer call() throws Exception {
     if(version) {
       try {
-        String v = Files.readString(Path.of("src/about/version.txt"));
+        String v = Files.readString(Path.of("src/main/resources/about/version.txt"));
         System.out.println("Statique Version " + v);
       } catch (Exception e){
         System.err.println("Error, generator version is not provided.");
