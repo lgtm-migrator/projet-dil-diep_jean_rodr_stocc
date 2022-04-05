@@ -2,8 +2,7 @@ package ch.heigvd.statique;
 
 import ch.heigvd.statique.commands.*;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.io.InputStream;
 import java.util.concurrent.Callable;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -31,8 +30,8 @@ public class Statique implements Callable<Integer> {
   @Override
   public Integer call() throws Exception {
     if(version) {
-      try {
-        String v = Files.readString(Path.of("src/main/resources/about/version.txt"));
+      try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("about/version.txt")) {
+        String v = new String(inputStream.readAllBytes());
         System.out.println("Statique Version " + v);
       } catch (Exception e){
         System.err.println("Error, generator version is not provided.");
