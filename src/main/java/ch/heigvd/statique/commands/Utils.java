@@ -23,7 +23,6 @@ public class Utils {
    * @param destination  Destination path.
    */
   public static void copyFileFromResources(String resourceName, Path destination) throws IOException {
-    InputStream inputStream = Utils.class.getClassLoader().getResourceAsStream(resourceName);
-    FileUtils.copyInputStreamToFile(inputStream, destination.toFile());
+    FileUtils.copyURLToFile(Utils.class.getClassLoader().getResource(resourceName), destination.toFile());
   }
 }
