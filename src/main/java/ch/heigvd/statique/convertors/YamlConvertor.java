@@ -6,14 +6,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 
 public class YamlConvertor {
     /**
-     * Reads a YAML file and collects properties.
+     * Reads a YAML file to a Config object
      *
      * @param filepath File path
-     * @return Properties
+     * @return Config object
      * @throws IOException Couldn't load properties
      */
     public static Config fromFile(File filepath) throws IOException {
@@ -22,6 +21,19 @@ public class YamlConvertor {
             Yaml yaml = new Yaml();
             properties = yaml.load(fis);
         }
+
+        return new Config(properties);
+    }
+
+    /**
+     * Convert a YAML string to a Config object.
+     *
+     * @param yaml YAML string
+     * @return Config object
+     */
+    public static Config fromString(String yaml) {
+        Yaml yamlParser = new Yaml();
+        HashMap<String, Object> properties = yamlParser.load(yaml);
 
         return new Config(properties);
     }
