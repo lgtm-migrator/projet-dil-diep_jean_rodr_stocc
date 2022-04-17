@@ -6,6 +6,10 @@ import java.util.Map;
 public class Config {
   private Map<String, Object> config;
 
+  public Config() {
+    this(new HashMap<>());
+  }
+
   /**
    * Config constructor.
    *
@@ -13,7 +17,7 @@ public class Config {
    */
   public Config(Map<String, Object> config) {
     // Copy the config map to avoid external modification.
-    this.config = new HashMap<String,Object>(config);
+    this.config = new HashMap<String, Object>(config);
   }
 
   /**
@@ -26,9 +30,9 @@ public class Config {
   }
 
   /**
-   * Merge this config with another one.
-   * This will not affect the original config.
-   * If a key is present in both configs, the value of the other config will be used.
+   * Merge this config with another one. This will not affect the original
+   * config. If a key is present in both configs, the value of the other config
+   * will be used.
    *
    * @param config The config to merge with.
    * @return The merged config.

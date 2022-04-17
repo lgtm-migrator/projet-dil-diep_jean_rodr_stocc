@@ -1,4 +1,5 @@
 package ch.heigvd.statique.convertors;
+
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
@@ -6,8 +7,9 @@ import org.commonmark.renderer.html.HtmlRenderer;
 public class HtmlConvertor {
 
     /**
-     * Converts markdown to HTML
-     * from : https://simplesolution.dev/java-parse-markdown-to-html-using-commonmark/
+     * Converts markdown to HTML from :
+     * https://simplesolution.dev/java-parse-markdown-to-html-using-commonmark/
+     *
      * @param markdown Markdown file lines with '\n' separators
      * @return HTML lines
      */

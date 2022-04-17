@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.Callable;
+import ch.heigvd.statique.utils.Utils;
 
 @Command(name = "clean", description = "Clean a statique site")
 public class Clean implements Callable<Integer> {

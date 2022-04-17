@@ -1,8 +1,7 @@
-package ch.heigvd.statique.commands;
+package ch.heigvd.statique.utils;
 
 import org.apache.commons.io.FileUtils;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Path;
 
 public class Utils {

@@ -3,9 +3,7 @@ package ch.heigvd.statique.utils;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-
 import org.apache.commons.io.FileUtils;
-
 import ch.heigvd.statique.convertors.HtmlConvertor;
 
 public class Page {
@@ -17,7 +15,7 @@ public class Page {
    * Page constructor.
    *
    * @param fromPath The path to the markdown file.
-   * @param toPath The path to the HTML file.
+   * @param toPath   The path to the HTML file.
    */
   public Page(Path fromPath, Path toPath) {
     this.fromPath = fromPath;
@@ -29,8 +27,8 @@ public class Page {
    */
   public void render(Config config) throws IOException {
     String fileContent = readFile();
-    String[] yamlMd = seperateYamlMd(fileContent);
-    // TODO parse yaml into config
+    String[] yamlMd = separateYamlMd(fileContent);
+    // TODO parse yaml into pageConf
     String html = convertMd(yamlMd[1]);
     writeFile(html);
   }
@@ -57,9 +55,10 @@ public class Page {
    * Separate the YAML and the markdown.
    *
    * @param fileContent The file content.
-   * @return An array of 2 elements, the first one is the YAML, the second one is the markdown.
+   * @return An array of 2 elements, the first one is the YAML, the second one
+   *         is the markdown.
    */
-  private String[] seperateYamlMd(String fileContent) {
+  private String[] separateYamlMd(String fileContent) {
     return new String[] {"", fileContent};
   }
 

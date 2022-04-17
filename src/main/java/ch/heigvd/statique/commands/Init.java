@@ -6,6 +6,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.concurrent.Callable;
+
+import ch.heigvd.statique.utils.Utils;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 
