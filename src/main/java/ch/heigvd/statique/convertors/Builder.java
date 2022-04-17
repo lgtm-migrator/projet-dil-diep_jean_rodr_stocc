@@ -19,6 +19,10 @@ public class Builder {
     this.destination = destination;
   }
 
+  public Config getConfig() {
+    return config;
+  }
+
   public void build() throws IOException {
     Path configFile;
 
@@ -77,7 +81,7 @@ public class Builder {
     Path buildDirectory = buildDestination;
 
     // Must not be the destination directory
-    if (!rootDirectory.toPath().equals(destination)) {
+    if (!rootDirectory.toPath().equals(source)) {
       // Create the subdirectory in build directory
       buildDirectory = buildDestination.resolve(rootDirectory.getName());
       Files.createDirectories(buildDirectory);
@@ -99,7 +103,8 @@ public class Builder {
   private void fileBuilding(File file, Path destination) throws IOException {
     if (file.getName().endsWith(".md")) {
       // Convert the markdown file
-      Page page = new Page(file.toPath(), destination);
+      Path htmlFile = destination.resolve(file.getName().replaceFirst("\\.md$", ".html"));
+      Page page = new Page(file.toPath(), htmlFile);
       page.render(config);
     } else if (!file.getName().endsWith(".yaml") && !file.getName().endsWith(".yml")) {
       // Copy path
