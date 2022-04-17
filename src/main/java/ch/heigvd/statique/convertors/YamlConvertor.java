@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class YamlConvertor {
+
     /**
      * Reads a YAML file to a Config object
      *

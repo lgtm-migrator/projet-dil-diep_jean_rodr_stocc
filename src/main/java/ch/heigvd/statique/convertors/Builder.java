@@ -9,20 +9,37 @@ import ch.heigvd.statique.utils.Config;
 import ch.heigvd.statique.utils.Page;
 import ch.heigvd.statique.utils.Utils;
 
+/**
+ * This class is used to convert a Markdown "site" to a static website.
+ */
 public class Builder {
   private Path source;
   private Path destination;
   private Config config;
 
+  /**
+   * Builder constructor.
+   *
+   * @param source      source directory
+   * @param destination destination directory
+   */
   public Builder(Path source, Path destination) {
     this.source = source;
     this.destination = destination;
   }
 
+  /**
+   * Get the configuration of the website.
+   *
+   * @return the configuration of the website
+   */
   public Config getConfig() {
     return config;
   }
 
+  /**
+   * Build the website.
+   */
   public void build() throws IOException {
     Path configFile;
 

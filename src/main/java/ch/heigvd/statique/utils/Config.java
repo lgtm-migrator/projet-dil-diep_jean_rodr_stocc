@@ -6,6 +6,9 @@ import java.util.Map;
 public class Config {
   private Map<String, Object> config;
 
+  /**
+   * Config default constructor.
+   */
   public Config() {
     this(new HashMap<>());
   }
