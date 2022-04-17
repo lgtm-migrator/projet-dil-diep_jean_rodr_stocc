@@ -1,15 +1,10 @@
 package ch.heigvd.statique.convertors;
 
-import ch.heigvd.statique.convertors.HtmlConvertor;
-import ch.heigvd.statique.convertors.YamlConvertor;
 import ch.heigvd.statique.utils.Utils;
-import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.yaml.snakeyaml.Yaml;
-import picocli.CommandLine;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -23,24 +18,24 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class BuilderTest {
-  static Path root, build;
-  private static final LinkedList<Path> filesMDPath = new LinkedList<>();
-  private static final LinkedList<Path> filesHtmlPath = new LinkedList<>();
-  private static final LinkedList<Path> filesYamlPath = new LinkedList<>();
-  private static final LinkedList<Path> filesOtherPath = new LinkedList<>();
-  private static final LinkedList<String> filesMDText = new LinkedList<>();
-  private static final LinkedList<String> filesHtmlText = new LinkedList<>();
-  private static final LinkedList<String> filesYamlText = new LinkedList<>();
-  private static final LinkedList<Map<String, Object>> filesYamlMap = new LinkedList<>();
+  Path root, build;
+  private final LinkedList<Path> filesMDPath = new LinkedList<>();
+  private final LinkedList<Path> filesHtmlPath = new LinkedList<>();
+  private final LinkedList<Path> filesYamlPath = new LinkedList<>();
+  private final LinkedList<Path> filesOtherPath = new LinkedList<>();
+  private final LinkedList<String> filesMDText = new LinkedList<>();
+  private final LinkedList<String> filesHtmlText = new LinkedList<>();
+  private final LinkedList<String> filesYamlText = new LinkedList<>();
+  private final LinkedList<Map<String, Object>> filesYamlMap = new LinkedList<>();
 
   /**
    * Writes inside a file
    *
    * @param filePath file path
    * @param text     file text (using \n separators)
-   * @throws IOException BufferWritter exception
+   * @throws IOException BufferWriter exception
    */
-  private static void writeFile(String filePath, String text) throws IOException {
+  private void writeFile(String filePath, String text) throws IOException {
     try (BufferedWriter out = new BufferedWriter(
         new OutputStreamWriter(new FileOutputStream(filePath), StandardCharsets.UTF_8))) {
       out.write(text);
@@ -52,8 +47,8 @@ public class BuilderTest {
    *
    * @throws IOException File creation exception
    */
-  @BeforeAll
-  static void createFiles() throws IOException {
+  @BeforeEach
+  void createFiles() throws IOException {
     root = Files.createTempDirectory("site");
     build = root.resolve("build");
 
@@ -99,7 +94,7 @@ public class BuilderTest {
    * @param path image path with name and png extension
    * @throws IOException
    */
-  public static void imageGenerator(String path) throws IOException {
+  public void imageGenerator(String path) throws IOException {
     // image dimension
     int width = 640;
     int height = 320;
