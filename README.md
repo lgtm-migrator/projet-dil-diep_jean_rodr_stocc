@@ -28,5 +28,9 @@ manuellement l'ancien dossier `bin` à la racine du projet et dézipez le nouvea
 
 Ajouter le dossier `statique/bin` à votre variable d'environnement `PATH`.
 
+# Diagramme UML
+
+Les documents contenant les digrammes UML sont disponible [ICI][uml_diag].
 
 [picocli]: <https://picocli.info>
+[uml_diag]: <https://nextcloud.mewfortytwo.ch/s/t6rFikFn3zKnGpx>
