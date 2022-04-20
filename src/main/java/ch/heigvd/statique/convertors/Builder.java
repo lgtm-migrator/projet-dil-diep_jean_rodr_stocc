@@ -75,8 +75,8 @@ public class Builder {
    * explorer sees a file, it converts the file or copy it in the build
    * directory.
    *
-   * @param rootDirectory  root directory
-   * @param buildDirectory build directory
+   * @param rootDirectory    root directory
+   * @param buildDestination build directory
    */
   private void exploreAndBuild(File rootDirectory, Path buildDestination) throws IOException {
     // Build the files

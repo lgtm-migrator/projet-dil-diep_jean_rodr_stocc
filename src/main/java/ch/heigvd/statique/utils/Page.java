@@ -45,7 +45,7 @@ public class Page {
   /**
    * Write the HTML to the destination.
    *
-   * @param html The HTML to write.
+   * @param content The HTML to write.
    */
   private void writeFile(String content) throws IOException {
     FileUtils.writeStringToFile(toPath.toFile(), content, StandardCharsets.UTF_8);
@@ -65,7 +65,7 @@ public class Page {
   /**
    * Convert the markdown to HTML and apply the template.
    *
-   * @param markdown The markdown to convert.
+   * @param md The markdown to convert.
    * @return The HTML.
    */
   private String convertMd(String md) {

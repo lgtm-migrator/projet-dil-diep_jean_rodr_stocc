@@ -37,7 +37,7 @@ public class Config {
    * config. If a key is present in both configs, the value of the other config
    * will be used.
    *
-   * @param config The config to merge with.
+   * @param other The config to merge with.
    * @return The merged config.
    */
   public Config merge(Config other) {
