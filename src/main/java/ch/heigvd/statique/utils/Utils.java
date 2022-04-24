@@ -1,8 +1,7 @@
-package ch.heigvd.statique.commands;
+package ch.heigvd.statique.utils;
 
 import org.apache.commons.io.FileUtils;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Path;
 
 public class Utils {
@@ -23,7 +22,6 @@ public class Utils {
    * @param destination  Destination path.
    */
   public static void copyFileFromResources(String resourceName, Path destination) throws IOException {
-    InputStream inputStream = Utils.class.getClassLoader().getResourceAsStream(resourceName);
-    FileUtils.copyInputStreamToFile(inputStream, destination.toFile());
+    FileUtils.copyURLToFile(Utils.class.getClassLoader().getResource(resourceName), destination.toFile());
   }
 }

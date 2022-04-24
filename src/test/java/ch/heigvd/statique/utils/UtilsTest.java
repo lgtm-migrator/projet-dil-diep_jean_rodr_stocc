@@ -1,6 +1,7 @@
-package ch.heigvd.statique.commands;
+package ch.heigvd.statique.utils;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Test;
 class UtilsTest {
 
   Path root, dir1, dir2, dir3, file1, file2, file3;
+  Path resourceFile;
 
   /**
    * Set up the directories to test the deletion.
@@ -25,6 +27,7 @@ class UtilsTest {
     file1 = Files.createFile(dir1.resolve("file1"));
     file2 = Files.createFile(dir2.resolve("file2"));
     file3 = Files.createFile(dir3.resolve("file3"));
+    resourceFile = root.resolve("resource.txt");
   }
 
   /**
@@ -35,6 +38,7 @@ class UtilsTest {
     Files.deleteIfExists(file3);
     Files.deleteIfExists(file2);
     Files.deleteIfExists(file1);
+    Files.deleteIfExists(resourceFile);
     Files.deleteIfExists(dir3);
     Files.deleteIfExists(dir2);
     Files.deleteIfExists(dir1);
@@ -56,4 +60,12 @@ class UtilsTest {
     assertFalse(Files.exists(file3));
   }
 
+  /**
+   * Test to copy a file from resources to a destination.
+   */
+  @Test
+  public void copyFileFromResources() throws IOException {
+    Utils.copyFileFromResources("test.txt", resourceFile);
+    assertTrue(Files.exists(resourceFile));
+  }
 }
