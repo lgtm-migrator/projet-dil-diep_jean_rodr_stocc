@@ -21,7 +21,8 @@ public class PageTest {
   private static final LinkedList<String> filesMDText = new LinkedList<>();
   private static final LinkedList<String> filesHtmlText = new LinkedList<>();
 
-  private static final String defaultMD = "# heading h1\n" + "## heading h2\n" + "### heading h2\n"
+  private static final String defaultMD = "titre: Mon premier article\nauteur: Jean François\n"
+      + "date: 2021-03-10\n---\n # heading h1\n" + "## heading h2\n" + "### heading h2\n"
       + "#### heading h4\n" + "---\n" + "- 1st  list\n" + "    - second list\n" + "        - third list\n"
       + "- end list \n" + "---\n"
       + "[<img src=\"https://mdn.github.io/beginner-html-site/images/firefox-icon.png\">](https://www.mozilla.org/)  \n"
