@@ -105,7 +105,7 @@ public class PageTest {
       filesHtmlPath.add(toPath);
       Page page = new Page(fromPath, toPath);
 
-      page.render(null);
+      page.render(new Config());
       String html = FileUtils.readFileToString(toPath.toFile(), StandardCharsets.UTF_8);
 
       assertEquals(filesHtmlText.get(i), html);

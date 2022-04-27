@@ -30,17 +30,15 @@ public class Page {
    * @param config The site configuration
    */
   public void render(Config config) throws IOException {
+    if (config == null) {
+      throw new RuntimeException("Config should not be null");
+    }
+
     String fileContent = readFile();
     String[] yamlMd = separateYamlMd(fileContent);
 
-    // Create page configuration
-    pageConf = new Config();
-
     // Merge site configuration with page configuration
-    if(config != null){
-      pageConf = pageConf.merge(config);
-    }
-    pageConf = pageConf.merge(YamlConvertor.fromString(yamlMd[0]));
+    pageConf = config.merge(YamlConvertor.fromString(yamlMd[0]));
 
     String html = convertMd(yamlMd[1]);
     writeFile(html);
