@@ -57,7 +57,7 @@ public class BuildTest {
 
     filesMDPath.add(Files.createFile(root.resolve("index.md")));
     filesHtmlPath.add(build.resolve("index.html"));
-    filesMDText.add("# Mon premier article\n" + "## Mon sous-titre\n" + "Le contenu de mon article.\n"
+    filesMDText.add("date: 2021-03-10\n---\n # Mon premier article\n" + "## Mon sous-titre\n" + "Le contenu de mon article.\n"
         + "![Une image](./dossier/image.png)\n");
 
     writeFile(filesMDPath.getLast().toString(), filesMDText.getLast());
@@ -79,7 +79,7 @@ public class BuildTest {
     Files.createDirectories(root.resolve("dossier"));
     filesMDPath.add(Files.createFile(root.resolve("dossier/page.md")));
     filesHtmlPath.add(build.resolve("dossier/page.html"));
-    filesMDText.add("# Première page\n");
+    filesMDText.add("date: 2021-03-10\n---\n # Première page\n");
     writeFile(filesMDPath.getLast().toString(), filesMDText.getLast());
 
     // Directory path that does not exist

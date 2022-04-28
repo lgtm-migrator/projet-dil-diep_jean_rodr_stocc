@@ -3,6 +3,8 @@ package ch.heigvd.statique.utils;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+
+import ch.heigvd.statique.convertors.YamlConvertor;
 import org.apache.commons.io.FileUtils;
 import ch.heigvd.statique.convertors.HtmlConvertor;
 
@@ -24,11 +26,20 @@ public class Page {
 
   /**
    * Render the markdown to HTML and save it to the destination.
+   *
+   * @param config The site configuration
    */
   public void render(Config config) throws IOException {
+    if (config == null) {
+      throw new RuntimeException("Config should not be null");
+    }
+
     String fileContent = readFile();
     String[] yamlMd = separateYamlMd(fileContent);
-    // TODO parse yaml into pageConf
+
+    // Merge site configuration with page configuration
+    pageConf = config.merge(YamlConvertor.fromString(yamlMd[0]));
+
     String html = convertMd(yamlMd[1]);
     writeFile(html);
   }
@@ -53,13 +64,14 @@ public class Page {
 
   /**
    * Separate the YAML and the markdown.
+   * Warning : The markdown needs to contain a yaml bloc code
    *
    * @param fileContent The file content.
    * @return An array of 2 elements, the first one is the YAML, the second one
    *         is the markdown.
    */
   private String[] separateYamlMd(String fileContent) {
-    return new String[] {"", fileContent};
+    return fileContent.split("\r?\n ?--- ?\r?\n", 2);
   }
 
   /**
