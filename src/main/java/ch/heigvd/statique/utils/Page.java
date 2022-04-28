@@ -5,6 +5,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 
 import ch.heigvd.statique.convertors.YamlConvertor;
+import com.github.jknack.handlebars.Handlebars;
+import com.github.jknack.handlebars.Template;
 import org.apache.commons.io.FileUtils;
 import ch.heigvd.statique.convertors.HtmlConvertor;
 
@@ -80,8 +82,8 @@ public class Page {
    * @param md The markdown to convert.
    * @return The HTML.
    */
-  private String convertMd(String md) {
-    // TODO render with template
-    return HtmlConvertor.fromMarkdown(md);
+  private String convertMd(String md) throws IOException {
+    String html = HtmlConvertor.fromMarkdown(md);
+    return HtmlConvertor.renderHtml(html, pageConf);
   }
 }
