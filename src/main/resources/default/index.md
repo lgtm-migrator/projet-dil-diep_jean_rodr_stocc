@@ -1,3 +1,5 @@
+title: index
+---
 # Accueil
 
 ## Lorem ipsum
