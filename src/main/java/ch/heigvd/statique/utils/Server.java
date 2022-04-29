@@ -3,10 +3,12 @@ package ch.heigvd.statique.utils;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
+import org.apache.commons.io.FileUtils;
 
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -15,13 +17,15 @@ import java.util.logging.Logger;
 public class Server {
     private final static Logger LOG = Logger.getLogger(Server.class.getName());
     private final Path site;
+    private final int port;
 
-    public Server(Path site) {
+    public Server(Path site, int port) {
         this.site = site;
+        this.port = port;
     }
 
     public void start() throws IOException {
-        HttpServer server = HttpServer.create(new InetSocketAddress(1234), 1);
+        HttpServer server = HttpServer.create(new InetSocketAddress(port), 1);
         server.createContext("/", new MyHttpHandler());
         ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(10);
         server.setExecutor(threadPoolExecutor);
@@ -34,6 +38,9 @@ public class Server {
     class MyHttpHandler implements HttpHandler {
 
         public void handle(HttpExchange t) throws IOException {
+            // Modified code from : http://www.microhowto.info/howto/serve_web_pages_using_an_embedded_http_server_in_java.html
+
+            // Gets request
             String root = site + "/build";
             URI uri = t.getRequestURI();
             File file = new File(root + uri.getPath()).getCanonicalFile();
@@ -47,18 +54,22 @@ public class Server {
                 OutputStream os = t.getResponseBody();
                 os.write(response.getBytes());
                 os.close();
+                LOG.info("Server : " + response);
             } else {
                 // Object exists and is a file: accept with response code 200.
                 t.sendResponseHeaders(200, 0);
-                OutputStream os = t.getResponseBody();
-                FileInputStream fs = new FileInputStream(file);
-                final byte[] buffer = new byte[0x10000];
-                int count = 0;
-                while ((count = fs.read(buffer)) >= 0) {
-                    os.write(buffer,0,count);
+
+                // Get page text
+                String pageText = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+
+                // Send page content
+                try (BufferedWriter out = new BufferedWriter(
+                        new OutputStreamWriter(t.getResponseBody(), StandardCharsets.UTF_8))) {
+                    out.write(pageText);
+                    out.flush();
                 }
-                fs.close();
-                os.close();
+
+                LOG.info("Server : file " + file.getName() + " sent");
             }
         }
     }

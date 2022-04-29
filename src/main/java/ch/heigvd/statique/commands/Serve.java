@@ -13,11 +13,13 @@ import java.util.concurrent.Callable;
 public class Serve implements Callable<Integer> {
     @CommandLine.Parameters(paramLabel = "SITE", description = "The site to serve")
     public Path site;
+    @CommandLine.Parameters(paramLabel = "PORT", description = "The server port number")
+    public int port;
 
     @Override
     public Integer call() throws IOException {
         System.out.println("Command serve");
-        Server server = new Server(site);
+        Server server = new Server(site, port);
         server.start();
         return 0;
     }
