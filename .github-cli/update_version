@@ -1,0 +1,37 @@
+#!/bin/sh
+
+# Directory of this script
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
+git config --global user.email $EMAIL
+git config --global user.name $NAME
+
+MVN_VERSION="$(mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate -Dexpression=project.version -q -DforceStdout 2> /dev/null)"
+GIT_VERSION="$(git describe --tags --abbrev=0)"
+
+echo "Maven version: $MVN_VERSION"
+echo "Git version: $GIT_VERSION"
+
+# If the git version is not the same as the maven version, update needed files,
+# commit the changes and displaces the tag.
+if [ "$MVN_VERSION" != "$GIT_VERSION" ]; then
+  echo "Updating maven version"
+  mvn versions:set -DnewVersion="${GIT_VERSION:1}"
+
+  echo $GIT_VERSION > $DIR/../src/main/resources/about/version.txt
+
+  echo "Removing old tag"
+  git tag -d $GIT_VERSION
+
+  echo "Committing changes"
+  git add $DIR/../src/main/resources/about/version.txt $DIR/../pom.xml
+  git commit -m "Automatic update version to $GIT_VERSION"
+
+  echo "Tagging release"
+  git tag $GIT_VERSION
+
+  echo "Pushing changes"
+  git push origin --follow-tags
+else
+  echo "No need to update maven version"
+fi
