@@ -13,6 +13,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.LinkedList;
@@ -21,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ServeTest {
   Path root;
-  private final static String SITE = "site";
   private final static int PORT = 12341;
   private final LinkedList<String> uriLinks = new LinkedList<>();
 
@@ -32,18 +32,18 @@ public class ServeTest {
    */
   @BeforeEach
   void createFiles() throws RuntimeException, IOException {
+    root = Files.createTempDirectory("site");
     // Initialize site
-    int exitCode = new CommandLine(new Init()).execute(SITE);
+    int exitCode = new CommandLine(new Init()).execute(String.valueOf(root));
     if(exitCode == -1)
       throw new RuntimeException("Couldn't init site");
 
     // Build site
-    exitCode = new CommandLine(new Build()).execute(SITE);
+    exitCode = new CommandLine(new Build()).execute(String.valueOf(root));
     if(exitCode == -1)
       throw new RuntimeException("Couldn't build site");
 
     // Add links
-    root = new File(SITE).toPath();
     uriLinks.add("/index.html");
   }
 
@@ -61,7 +61,7 @@ public class ServeTest {
   @Test
   void getResponse() throws IOException, InterruptedException {
     // Create server
-    new CommandLine(new Serve()).execute(SITE, String.valueOf(PORT));
+    new CommandLine(new Serve()).execute(String.valueOf(root), String.valueOf(PORT));
     HttpClient client = HttpClient.newBuilder()
             .version(HttpClient.Version.HTTP_1_1)
             .followRedirects(HttpClient.Redirect.NORMAL)
