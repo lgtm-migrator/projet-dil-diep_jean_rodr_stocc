@@ -18,7 +18,7 @@ public class Serve implements Callable<Integer> {
 
     @Override
     public Integer call() throws IOException {
-        System.out.println("Command serve");
+        // Creates server
         Server server = new Server(site, port);
         server.start();
         return 0;

@@ -19,11 +19,22 @@ public class Server {
     private final Path site;
     private final int port;
 
+    /**
+     * Server constructor
+     *
+     * @param site path to site
+     * @param port server port number
+     */
     public Server(Path site, int port) {
         this.site = site;
         this.port = port;
     }
 
+    /**
+     * Start the server
+     *
+     * @throws IOException Couldn't start the server
+     */
     public void start() throws IOException {
         HttpServer server = HttpServer.create(new InetSocketAddress(port), 1);
         server.createContext("/", new MyHttpHandler());
@@ -33,10 +44,13 @@ public class Server {
         LOG.info(" Server started on port 1234");
     }
 
-
-
     class MyHttpHandler implements HttpHandler {
 
+        /**
+         * Handle http request
+         * @param t http exchange
+         * @throws IOException Couldn't respond to the client request
+         */
         public void handle(HttpExchange t) throws IOException {
             // Modified code from : http://www.microhowto.info/howto/serve_web_pages_using_an_embedded_http_server_in_java.html
 
