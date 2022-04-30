@@ -10,14 +10,10 @@ echo "Git version: $GIT_VERSION"
 
 # If the git version is not the same as the maven version, update needed files,
 # commit the changes and displaces the tag.
-if [ "$MVN_VERSION" != "${GIT_VERSION:1}" ]; then
-  echo "Updating maven version"
-  mvn versions:set -DnewVersion="${GIT_VERSION:1}"
+echo "Updating maven version"
+mvn versions:set -DnewVersion="${GIT_VERSION:1}"
 
-  echo $GIT_VERSION > src/main/resources/about/version.txt
+echo $GIT_VERSION > src/main/resources/about/version.txt
 
-  echo "Committing changes"
-  git add src/main/resources/about/version.txt pom.xml
-else
-  echo "No need to update maven version"
-fi
+echo "Committing changes"
+git add src/main/resources/about/version.txt pom.xml
