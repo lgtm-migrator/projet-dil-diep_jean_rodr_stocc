@@ -60,7 +60,15 @@ public class Server {
 
             LOG.info("File path : " + file.getPath());
 
-            if (!file.isFile()) {
+            if(uri.toString().contains("/../")){
+                // Suspected path traversal attack: reject with 403 error.
+                String response = "403 (Forbidden)\n";
+                t.sendResponseHeaders(403, response.length());
+                OutputStream os = t.getResponseBody();
+                os.write(response.getBytes());
+                os.close();
+                LOG.info("Server : " + response);
+            } else if (!file.isFile()) {
                 // Object does not exist or is not a file: reject with 404 error.
                 String response = "404 (Not Found)\n";
                 t.sendResponseHeaders(404, response.length());
