@@ -102,4 +102,19 @@ public class ServeTest {
     HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
     assertEquals(404, response.statusCode());
   }
+
+  /**
+   * Test 403 status code
+   */
+  @Test
+  void get403() throws IOException, InterruptedException {
+    HttpClient client = getHttpClient();
+
+    HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create("http://localhost:" + PORT + "/../../admincode.txt"))
+            .build();
+
+    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+    assertEquals(403, response.statusCode());
+  }
 }
