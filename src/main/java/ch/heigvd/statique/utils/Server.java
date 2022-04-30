@@ -55,9 +55,8 @@ public class Server {
             // Modified code from : http://www.microhowto.info/howto/serve_web_pages_using_an_embedded_http_server_in_java.html
 
             // Gets request
-            String root = site + "/build";
             URI uri = t.getRequestURI();
-            File file = new File(root + uri.getPath()).getCanonicalFile();
+            File file = new File(site + uri.getPath()).getCanonicalFile();
 
             LOG.info("File path : " + file.getPath());
 

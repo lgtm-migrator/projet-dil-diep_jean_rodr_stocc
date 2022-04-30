@@ -1,8 +1,8 @@
 package ch.heigvd.statique.commands;
 
 import ch.heigvd.statique.utils.Utils;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import picocli.CommandLine;
 
@@ -21,17 +21,17 @@ import java.util.LinkedList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ServeTest {
-  Path root;
+  static Path root;
   private final static int PORT = 12341;
-  private final LinkedList<String> uriLinks = new LinkedList<>();
+  private final static LinkedList<String> uriLinks = new LinkedList<>();
 
   /**
-   * Creates files for test
+   * Creates environment for test
    *
    * @throws RuntimeException File creation exception
    */
-  @BeforeEach
-  void createFiles() throws RuntimeException, IOException {
+  @BeforeAll
+  static void createEnvironment() throws RuntimeException, IOException {
     root = Files.createTempDirectory("site");
     // Initialize site
     int exitCode = new CommandLine(new Init()).execute(String.valueOf(root));
@@ -45,14 +45,29 @@ public class ServeTest {
 
     // Add links
     uriLinks.add("/index.html");
+
+    // Create server
+    new CommandLine(new Serve()).execute(String.valueOf(root), String.valueOf(PORT));
   }
 
   /**
    * Clean up temporary directory
    */
-  @AfterEach
-  void tearDown() throws IOException {
+  @AfterAll
+  static void tearDown() throws IOException {
     Utils.deleteRecursive(root);
+  }
+
+  /**
+   * @return Simple HTTP client
+   */
+  private HttpClient getHttpClient(){
+    return HttpClient.newBuilder()
+            .version(HttpClient.Version.HTTP_1_1)
+            .followRedirects(HttpClient.Redirect.NORMAL)
+            .connectTimeout(Duration.ofSeconds(20))
+            .proxy(ProxySelector.of(new InetSocketAddress("localhost", PORT)))
+            .build();
   }
 
   /**
@@ -60,14 +75,7 @@ public class ServeTest {
    */
   @Test
   void getResponse() throws IOException, InterruptedException {
-    // Create server
-    new CommandLine(new Serve()).execute(String.valueOf(root), String.valueOf(PORT));
-    HttpClient client = HttpClient.newBuilder()
-            .version(HttpClient.Version.HTTP_1_1)
-            .followRedirects(HttpClient.Redirect.NORMAL)
-            .connectTimeout(Duration.ofSeconds(20))
-            .proxy(ProxySelector.of(new InetSocketAddress("localhost", PORT)))
-            .build();
+    HttpClient client = getHttpClient();
 
     // Checks could get links
     for(String uriLink : uriLinks){
@@ -78,5 +86,20 @@ public class ServeTest {
       HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
       assertEquals(200, response.statusCode());
     }
+  }
+
+  /**
+   * Test 404 status code
+   */
+  @Test
+  void get404() throws IOException, InterruptedException {
+    HttpClient client = getHttpClient();
+
+    HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create("http://localhost:" + PORT + "/eweewf.ewfn"))
+            .build();
+
+    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+    assertEquals(404, response.statusCode());
   }
 }

@@ -20,7 +20,7 @@ public class Serve implements Callable<Integer> {
     @Override
     public Integer call() throws IOException {
         // Creates server
-        Server server = new Server(site, port);
+        Server server = new Server(site.resolve("build"), port);
         server.start();
         return 0;
     }
