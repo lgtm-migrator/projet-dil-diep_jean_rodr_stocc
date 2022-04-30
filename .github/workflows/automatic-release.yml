@@ -24,14 +24,7 @@ jobs:
           distribution: 'adopt'
           cache: maven
 
-      - name: Get is good
-        id: is_good
-        env:
-          GIT_VERSION: ${{ github.ref_name }}
-        run: echo "::set-output name=isgood::$(./.github-cli/is-version-good)"
-
       - name: Update project version
-        if: steps.step_id.is_good.isgood != 'true'
         env:
           GIT_VERSION: ${{ github.ref_name }}
         run: ./.github-cli/update-version
@@ -40,7 +33,6 @@ jobs:
         run: mvn --batch-mode --update-snapshots clean install
 
       - name: Commit version change
-        if: steps.step_id.is_good.isgood != 'true'
         uses: EndBug/add-and-commit@v9
         with:
           add: 'pom.xml src/main/resources/about/version.txt'
