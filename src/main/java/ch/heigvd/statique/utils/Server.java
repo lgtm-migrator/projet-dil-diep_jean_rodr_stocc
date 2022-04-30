@@ -26,7 +26,7 @@ public class Server {
      * @param port server port number
      */
     public Server(Path site, int port) {
-        this.site = site;
+        this.site = site.toAbsolutePath().normalize();
         this.port = port;
     }
 
@@ -58,9 +58,14 @@ public class Server {
             URI uri = t.getRequestURI();
             File file = new File(site + uri.getPath()).getCanonicalFile();
 
+            // Get index.html if the destination is a directory
+            if (file.isDirectory()) {
+                file = new File(file, "index.html");
+            }
+
             LOG.info("File path : " + file.getPath());
 
-            if(uri.toString().contains("/../")){
+            if(!file.getPath().startsWith(site.toString())){
                 // Suspected path traversal attack: reject with 403 error.
                 String response = "403 (Forbidden)\n";
                 t.sendResponseHeaders(403, response.length());

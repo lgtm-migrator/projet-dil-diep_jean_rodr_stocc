@@ -10,7 +10,7 @@ import java.util.concurrent.Callable;
 
 
 @Command(name = "serve", description = "Serve a static site.\n Access the server using : " +
-        "http://localhost:<PORT>/index.html")
+        "http://localhost:<PORT>/")
 public class Serve implements Callable<Integer> {
     @CommandLine.Parameters(paramLabel = "SITE", description = "The site to serve")
     public Path site;

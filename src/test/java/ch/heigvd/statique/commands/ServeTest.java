@@ -117,4 +117,19 @@ public class ServeTest {
     HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
     assertEquals(403, response.statusCode());
   }
+
+  /**
+   * When a directory is asked, the index of it should be loaded.
+   */
+  @Test
+  void directorySearchIndex() throws IOException, InterruptedException {
+    HttpClient client = getHttpClient();
+
+    HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create("http://localhost:" + PORT + "/"))
+            .build();
+
+    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+    assertEquals(200, response.statusCode());
+  }
 }
