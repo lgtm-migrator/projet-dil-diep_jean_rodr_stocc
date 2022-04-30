@@ -3,7 +3,7 @@ name: "Automatic release with tag"
 on:
   push:
     tags:
-      - "v*"
+      - "v*.*.*"
 
 jobs:
   tagged-release:
