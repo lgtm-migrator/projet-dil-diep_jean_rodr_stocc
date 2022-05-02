@@ -14,6 +14,7 @@ public class Page {
   private Path fromPath;
   private Path toPath;
   private Config pageConf;
+  private Template template;
 
   /**
    * Page constructor.
@@ -21,9 +22,10 @@ public class Page {
    * @param fromPath The path to the markdown file.
    * @param toPath   The path to the HTML file.
    */
-  public Page(Path fromPath, Path toPath) {
+  public Page(Path fromPath, Path toPath, Template temp) {
     this.fromPath = fromPath;
     this.toPath = toPath;
+    this.template = temp;
   }
 
   /**
@@ -43,7 +45,8 @@ public class Page {
     pageConf = config.merge(YamlConvertor.fromString(yamlMd[0]));
 
     String html = convertMd(yamlMd[1]);
-    writeFile(html);
+    String result = buildFromTemplate(html);
+    writeFile(result);
   }
 
   /**
@@ -86,4 +89,12 @@ public class Page {
     String html = HtmlConvertor.fromMarkdown(md);
     return HtmlConvertor.renderHtml(html, pageConf);
   }
+
+  private String buildFromTemplate(String html) throws IOException {
+
+    String[] str = {"config.yaml", "menu.html"};
+    return template.apply(pageConf.toRender());
+
+  }
 }
+

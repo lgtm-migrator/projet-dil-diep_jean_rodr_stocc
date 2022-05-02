@@ -8,6 +8,9 @@ import java.util.Objects;
 import ch.heigvd.statique.utils.Config;
 import ch.heigvd.statique.utils.Page;
 import ch.heigvd.statique.utils.Utils;
+import com.github.jknack.handlebars.Handlebars;
+import com.github.jknack.handlebars.Template;
+import com.github.jknack.handlebars.io.FileTemplateLoader;
 
 /**
  * This class is used to convert a Markdown "site" to a static website.
@@ -16,6 +19,8 @@ public class Builder {
   private Path source;
   private Path destination;
   private Config config;
+  private String templateName;
+  private Template template;
 
   /**
    * Builder constructor.
@@ -26,6 +31,8 @@ public class Builder {
   public Builder(Path source, Path destination) {
     this.source = source;
     this.destination = destination;
+    this.templateName = "layout";
+  //"/home/mordo/Documents/DIL/projet-dil-diep_jean_rodr_stocc/site/template/layout"; // TODO for now I've put it directly like this
   }
 
   /**
@@ -59,6 +66,7 @@ public class Builder {
       configFile = null;
     }
 
+
     // Read the config file
     if (configFile != null) {
       config = YamlConvertor.fromFile(configFile.toFile());
@@ -66,7 +74,12 @@ public class Builder {
       config = new Config();
     }
 
+    FileTemplateLoader loader = new FileTemplateLoader(source.resolve("template").toString());
+    Handlebars handlebars = new Handlebars(loader);
+    template = handlebars.compile(templateName);
+
     exploreAndBuild(source.toFile(), destination);
+
   }
 
   /**
@@ -121,8 +134,9 @@ public class Builder {
     if (file.getName().endsWith(".md")) {
       // Convert the markdown file
       Path htmlFile = destination.resolve(file.getName().replaceFirst("\\.md$", ".html"));
-      Page page = new Page(file.toPath(), htmlFile);
+      Page page = new Page(file.toPath(), htmlFile, template);
       page.render(config);
+
     } else if (!file.getName().endsWith(".yaml") && !file.getName().endsWith(".yml")) {
       // Copy path
       Files.copy(file.toPath(), destination.resolve(file.getName()));

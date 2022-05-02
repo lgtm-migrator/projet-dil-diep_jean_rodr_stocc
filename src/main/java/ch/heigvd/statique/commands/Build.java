@@ -5,6 +5,8 @@ import java.util.concurrent.Callable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import ch.heigvd.statique.convertors.Builder;
+import com.github.jknack.handlebars.Handlebars;
+import com.github.jknack.handlebars.Template;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 
