@@ -92,7 +92,8 @@ public class Page {
 
   private String buildFromTemplate(String html) throws IOException {
 
-    String[] str = {"config.yaml", "menu.html"};
+    var content = pageConf.toRender();
+    content.put("content", html);
     return template.apply(pageConf.toRender());
 
   }

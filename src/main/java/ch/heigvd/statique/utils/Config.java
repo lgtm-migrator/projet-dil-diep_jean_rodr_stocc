@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Config {
-  private Map<String, Object> config;
+  public Map<String, Object> config;
 
   /**
    * Config default constructor.
@@ -41,14 +41,9 @@ public class Config {
    * @return The merged config.
    */
   public Config merge(Config other) {
-    HashMap<String, Object> debile = new HashMap<>();
-    debile.put("config", this.config);
-    debile.put("page", other);
-    return new Config(debile);
-    /*
-    Config merged = new Config(this.config);
-    merged.config.putAll(other.config);
-    return merged;
-     */
+    HashMap<String, Object> temp = new HashMap<>();
+    temp.put("config", this.config);
+    temp.put("page", other.config);
+    return new Config(temp);
   }
 }

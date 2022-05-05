@@ -32,7 +32,6 @@ public class Builder {
     this.source = source;
     this.destination = destination;
     this.templateName = "layout";
-  //"/home/mordo/Documents/DIL/projet-dil-diep_jean_rodr_stocc/site/template/layout"; // TODO for now I've put it directly like this
   }
 
   /**

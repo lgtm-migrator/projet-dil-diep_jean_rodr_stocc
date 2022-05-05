@@ -1,8 +1,8 @@
 title: Home page
 ---
 
-# Titre 1
+# {{ config.title }}
 
 ## Titre 2
 
-paragraphe.
+poum
