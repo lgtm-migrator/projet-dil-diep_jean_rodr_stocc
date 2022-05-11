@@ -1,3 +1,6 @@
+title: Home page
+---
+
 # Accueil
 
 ## Lorem ipsum

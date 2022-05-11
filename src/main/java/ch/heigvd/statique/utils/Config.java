@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Config {
-  public Map<String, Object> config;
+  private Map<String, Object> config;
 
   /**
    * Config default constructor.

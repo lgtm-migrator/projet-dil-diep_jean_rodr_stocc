@@ -21,6 +21,7 @@ public class Page {
    *
    * @param fromPath The path to the markdown file.
    * @param toPath   The path to the HTML file.
+   * @param temp     The template used by the page
    */
   public Page(Path fromPath, Path toPath, Template temp) {
     this.fromPath = fromPath;
