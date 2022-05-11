@@ -66,7 +66,6 @@ public class Builder {
       configFile = null;
     }
 
-
     // Read the config file
     if (configFile != null) {
       config = YamlConvertor.fromFile(configFile.toFile());
