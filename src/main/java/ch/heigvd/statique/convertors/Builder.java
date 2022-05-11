@@ -21,6 +21,7 @@ public class Builder {
   private Config config;
   private String templateName;
   private Template template;
+  private String templateFolder = "template";
 
   /**
    * Builder constructor.
@@ -104,6 +105,10 @@ public class Builder {
 
     // Must not be the build directory
     if (rootDirectory.toPath().equals(destination)) {
+      return;
+    }
+
+    if (rootDirectory.getName().equals(templateFolder)) {
       return;
     }
 
