@@ -1,0 +1,17 @@
+#!/bin/bash
+
+
+MVN_VERSION="$(mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate -Dexpression=project.version -q -DforceStdout 2> /dev/null)"
+
+echo "Maven version: $MVN_VERSION"
+echo "Git version: $GIT_VERSION"
+
+# If the git version is not the same as the maven version, update needed files,
+# commit the changes and displaces the tag.
+echo "Updating maven version"
+mvn versions:set -DnewVersion="${GIT_VERSION:1}"
+
+echo $GIT_VERSION > src/main/resources/about/version.txt
+
+echo "Committing changes"
+git add src/main/resources/about/version.txt pom.xml

@@ -2,7 +2,7 @@
 name: Create new task
 about: Create easily a new task with some requirement needed.
 title: My new task's name
-labels: ''
+labels: 'Sprint X'
 assignees: ''
 
 ---
