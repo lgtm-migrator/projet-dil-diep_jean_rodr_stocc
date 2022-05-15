@@ -5,6 +5,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 
 import ch.heigvd.statique.convertors.YamlConvertor;
+import com.github.jknack.handlebars.Handlebars;
+import com.github.jknack.handlebars.Template;
 import org.apache.commons.io.FileUtils;
 import ch.heigvd.statique.convertors.HtmlConvertor;
 
@@ -12,16 +14,19 @@ public class Page {
   private Path fromPath;
   private Path toPath;
   private Config pageConf;
+  private Template template;
 
   /**
    * Page constructor.
    *
    * @param fromPath The path to the markdown file.
    * @param toPath   The path to the HTML file.
+   * @param temp     The template used by the page
    */
-  public Page(Path fromPath, Path toPath) {
+  public Page(Path fromPath, Path toPath, Template temp) {
     this.fromPath = fromPath;
     this.toPath = toPath;
+    this.template = temp;
   }
 
   /**
@@ -41,7 +46,8 @@ public class Page {
     pageConf = config.merge(YamlConvertor.fromString(yamlMd[0]));
 
     String html = convertMd(yamlMd[1]);
-    writeFile(html);
+    String result = buildFromTemplate(html);
+    writeFile(result);
   }
 
   /**
@@ -80,8 +86,17 @@ public class Page {
    * @param md The markdown to convert.
    * @return The HTML.
    */
-  private String convertMd(String md) {
-    // TODO render with template
-    return HtmlConvertor.fromMarkdown(md);
+  private String convertMd(String md) throws IOException {
+    String html = HtmlConvertor.fromMarkdown(md);
+    return HtmlConvertor.renderHtml(html, pageConf);
+  }
+
+  private String buildFromTemplate(String html) throws IOException {
+
+    var content = pageConf.toRender();
+    content.put("content", html);
+    return template.apply(pageConf.toRender());
+
   }
 }
+

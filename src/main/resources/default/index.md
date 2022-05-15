@@ -1,5 +1,6 @@
-title: index
+title: Home page
 ---
+
 # Accueil
 
 ## Lorem ipsum

@@ -20,6 +20,8 @@ public class Init implements Callable<Integer> {
         {
             add("index.md");
             add("config.yaml");
+            add("template/layout.hbs");
+            add("template/menu.hbs");
         }
     };
 

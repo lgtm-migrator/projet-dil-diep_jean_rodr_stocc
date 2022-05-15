@@ -41,8 +41,9 @@ public class Config {
    * @return The merged config.
    */
   public Config merge(Config other) {
-    Config merged = new Config(this.config);
-    merged.config.putAll(other.config);
-    return merged;
+    HashMap<String, Object> temp = new HashMap<>();
+    temp.put("config", this.config);
+    temp.put("page", other.config);
+    return new Config(temp);
   }
 }

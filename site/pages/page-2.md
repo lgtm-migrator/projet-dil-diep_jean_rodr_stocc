@@ -5,4 +5,6 @@ title: Page 2
 
 ## Titre 2
 
-paragraphe.
+C'est le paragraphe
+
+![doja](./doja2.jpeg)
