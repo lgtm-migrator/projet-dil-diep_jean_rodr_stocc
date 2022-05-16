@@ -9,27 +9,29 @@ import static java.nio.file.StandardWatchEventKinds.*;
 
 public class Watcher {
     private final WatchService watcher;
-    private final Path site;
+    private final Path dir;
 
-    public Watcher(Path site) throws IOException {
+    public Watcher(Path dir) throws IOException {
         watcher = FileSystems.getDefault().newWatchService();
-        this.site = site;
+        this.dir = dir;
 
-        // TODO: Check if needed
-        site.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
-        watch();
+        dir.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
+        try {
+            watch();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void watch() throws IOException {
+    public void watch() throws IOException, InterruptedException {
         // from : https://docs.oracle.com/javase/tutorial/essential/io/notification.html
+        System.out.println("Watching...");
         while(true) {
             // Wait for key to be signaled
             WatchKey key;
-            try {
-                key = watcher.take();
-            } catch (InterruptedException x) {
-                return;
-            }
+            key = watcher.take();
+            if(key == null)
+                continue;
 
             for (WatchEvent<?> event: key.pollEvents()) {
                 WatchEvent.Kind<?> kind = event.kind();
@@ -39,24 +41,42 @@ public class Watcher {
                     continue;
                 }
 
+
                 // The filename is the context of the event.
                 WatchEvent<Path> ev = (WatchEvent<Path>)event;
                 Path filename = ev.context();
+
+                // Ignores build directory
+                if(filename.toString().equals("build")){
+                    continue;
+                }
+
+
+                if (ENTRY_CREATE.equals(kind)) {
+                    System.out.format("File '%s'" + " added.%n", filename);
+                } else if (ENTRY_DELETE.equals(kind)) {
+                    System.out.format("File '%s'" + " deleted.%n", filename);
+                } else if (ENTRY_MODIFY.equals(kind)) {
+                    System.out.format("File '%s'" + " changed.%n", filename);
+                }
 
                 // Verify that the new file is a text file.
                 // Resolve the filename against the directory.
                 // If the filename is "test" and the directory is "foo",
                 // the resolved name is "test/foo".
-                Path child = site.resolve(filename);
+                /*
+                Path child = dir.resolve(filename);
                 if (!Files.probeContentType(child).equals("text/plain")) {
                     System.err.format("File '%s'" +
                             " is not a plain text file.%n", filename);
                     continue;
                 }
+                */
 
                 // Builds all the site when changes appear
-                Builder builder = new Builder(site, site.resolve("build"));
+                Builder builder = new Builder(dir, dir.resolve("build"));
                 builder.build();
+                System.out.println("Site built");
 
                 // TODO: Check what to do with config files
                 // TODO: Build only a file
@@ -67,6 +87,7 @@ public class Watcher {
             // the directory is inaccessible so exit the loop.
             boolean valid = key.reset();
             if (!valid) {
+                System.err.println("Watcher : key no longer valid.");
                 break;
             }
         }
