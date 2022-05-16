@@ -20,4 +20,4 @@ jobs:
       - name: Build with Maven
         run: mvn javadoc:jar
       - name: Rename jar to zip
-        run: ./github-cli/javadoc-prepare
+        run: ./.github-cli/javadoc-prepare
