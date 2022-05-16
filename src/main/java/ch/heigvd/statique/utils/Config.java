@@ -1,5 +1,6 @@
 package ch.heigvd.statique.utils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,6 +22,23 @@ public class Config {
   public Config(Map<String, Object> config) {
     // Copy the config map to avoid external modification.
     this.config = new HashMap<String, Object>(config);
+  }
+
+  /**
+   * Construct a config with given key and value in prefixed values.
+   *
+   * @param config
+   * @param prefix
+   */
+  public Config(Map<String, Object> config, String prefix) {
+    ArrayList<Object> prefixes = new ArrayList<Object>(prefix.split("\\."));
+
+    Map<String, Object> topMap = new HashMap<>(config);
+    for (String subPrefix: prefixes) {
+      Map<String, Object> tmp = new HashMap<>();
+      tmp.put(subPrefix, topMap);
+      topMap = tmp;
+    }
   }
 
   /**
