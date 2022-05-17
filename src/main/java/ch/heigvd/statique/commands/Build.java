@@ -38,7 +38,7 @@ public class Build implements Callable<Integer> {
 
         // Constantly builds the site when changes occurred
         if (haveWatcher){
-            new Watcher(site);
+            new Thread(new Watcher(site)).start();
         }
 
         return 0;

@@ -41,7 +41,7 @@ public class Server {
         ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(10);
         server.setExecutor(threadPoolExecutor);
         server.start();
-        LOG.info(" Server started on port 1234");
+        LOG.info(" Server started on port " + port);
     }
 
     class MyHttpHandler implements HttpHandler {

@@ -7,7 +7,7 @@ import java.nio.file.*;
 
 import static java.nio.file.StandardWatchEventKinds.*;
 
-public class Watcher {
+public class Watcher implements Runnable{
     private final WatchService watcher;
     private final Path dir;
 
@@ -16,20 +16,21 @@ public class Watcher {
         this.dir = dir;
 
         dir.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
-        try {
-            watch();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
-    public void watch() throws IOException, InterruptedException {
+    @Override
+    public void run() {
         // from : https://docs.oracle.com/javase/tutorial/essential/io/notification.html
         System.out.println("Watching...");
         while(true) {
             // Wait for key to be signaled
             WatchKey key;
-            key = watcher.take();
+            try {
+                key = watcher.take();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                break;
+            }
             if(key == null)
                 continue;
 
@@ -75,7 +76,12 @@ public class Watcher {
 
                 // Builds all the site when changes appear
                 Builder builder = new Builder(dir, dir.resolve("build"));
-                builder.build();
+                try {
+                    builder.build();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    continue;
+                }
                 System.out.println("Site built");
 
                 // TODO: Check what to do with config files
