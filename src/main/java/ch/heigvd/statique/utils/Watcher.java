@@ -11,6 +11,10 @@ public class Watcher implements Runnable{
     private final WatchService watcher;
     private final Path dir;
 
+    /**
+     * Watcher constructor
+     * @param dir directory to watch
+     */
     public Watcher(Path dir) throws IOException {
         watcher = FileSystems.getDefault().newWatchService();
         this.dir = dir;
@@ -61,19 +65,6 @@ public class Watcher implements Runnable{
                     System.out.format("File '%s'" + " changed.%n", filename);
                 }
 
-                // Verify that the new file is a text file.
-                // Resolve the filename against the directory.
-                // If the filename is "test" and the directory is "foo",
-                // the resolved name is "test/foo".
-                /*
-                Path child = dir.resolve(filename);
-                if (!Files.probeContentType(child).equals("text/plain")) {
-                    System.err.format("File '%s'" +
-                            " is not a plain text file.%n", filename);
-                    continue;
-                }
-                */
-
                 // Builds all the site when changes appear
                 Builder builder = new Builder(dir, dir.resolve("build"));
                 try {
@@ -83,9 +74,6 @@ public class Watcher implements Runnable{
                     continue;
                 }
                 System.out.println("Site built");
-
-                // TODO: Check what to do with config files
-                // TODO: Build only a file
             }
 
             // Reset the key -- this step is critical if you want to
