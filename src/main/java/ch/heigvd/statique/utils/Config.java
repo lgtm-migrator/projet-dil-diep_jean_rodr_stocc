@@ -1,7 +1,9 @@
 package ch.heigvd.statique.utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Config {
@@ -31,14 +33,12 @@ public class Config {
    * @param prefix
    */
   public Config(Map<String, Object> config, String prefix) {
-    ArrayList<Object> prefixes = new ArrayList<Object>(prefix.split("\\."));
+    this();
+    add(config, prefix);
+  }
 
-    Map<String, Object> topMap = new HashMap<>(config);
-    for (String subPrefix: prefixes) {
-      Map<String, Object> tmp = new HashMap<>();
-      tmp.put(subPrefix, topMap);
-      topMap = tmp;
-    }
+  public void addConfig(Object config, String key) {
+    add(config, key);
   }
 
   /**
@@ -63,5 +63,32 @@ public class Config {
     temp.put("config", this.config);
     temp.put("page", other.config);
     return new Config(temp);
+  }
+
+  private void add(Object config, String key) {
+    // Get all prefixes
+    List<String> prefixes = Arrays.asList(key.split("\\."));
+
+    var keyMap = this.config;
+    var prefixIt = prefixes.iterator();
+    String prefix = prefixIt.next();
+    while(prefixIt.hasNext()) {
+      if (keyMap.containsKey(prefix)) {
+        Object tmp = keyMap.get(prefix);
+        if (tmp instanceof Map<?, ?>) {
+          keyMap = (Map<String, Object>) tmp;
+        } else {
+          throw new RuntimeException("Cannot add config to a non-map");
+        }
+      } else {
+        Map<String, Object> tmp = new HashMap<>();
+        keyMap.put(prefix, tmp);
+        keyMap = tmp;
+      }
+
+      prefix = prefixIt.next();
+    }
+
+    keyMap.put(prefix, config);
   }
 }
