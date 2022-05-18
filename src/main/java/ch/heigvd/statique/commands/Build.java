@@ -15,6 +15,7 @@ public class Build implements Callable<Integer> {
     @Parameters(paramLabel = "SITE", description = "The site to build")
     public Path site;
 
+
     @Override
     public Integer call() throws IOException {
         // Check that the site folder exists.
