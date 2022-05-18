@@ -33,8 +33,7 @@ public class Watcher implements Runnable {
      */
     private void registerDir(Path path) throws
             IOException {
-
-        if (!Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS)) {
+        if (!Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS) || path.getFileName().toString().equals("build")) {
             return;
         }
 
@@ -125,9 +124,7 @@ public class Watcher implements Runnable {
                     builder.build();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    continue;
                 }
-                System.out.println("Site built");
             }
 
             // Reset the key -- this step is critical if you want to
