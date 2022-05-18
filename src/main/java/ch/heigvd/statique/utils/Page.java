@@ -3,7 +3,6 @@ package ch.heigvd.statique.utils;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-
 import ch.heigvd.statique.convertors.YamlConvertor;
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
@@ -43,7 +42,9 @@ public class Page {
     String[] yamlMd = separateYamlMd(fileContent);
 
     // Merge site configuration with page configuration
-    pageConf = config.merge(YamlConvertor.fromString(yamlMd[0]));
+    pageConf = new Config();
+    pageConf.put("config", config);
+    pageConf.put("page", YamlConvertor.fromString(yamlMd[0]));
 
     String html = convertMd(yamlMd[1]);
     String result = buildFromTemplate(html);
@@ -69,8 +70,8 @@ public class Page {
   }
 
   /**
-   * Separate the YAML and the markdown.
-   * Warning : The markdown needs to contain a yaml bloc code
+   * Separate the YAML and the markdown. Warning : The markdown needs to contain
+   * a yaml bloc code
    *
    * @param fileContent The file content.
    * @return An array of 2 elements, the first one is the YAML, the second one
@@ -93,10 +94,9 @@ public class Page {
 
   private String buildFromTemplate(String html) throws IOException {
 
-    var content = pageConf.toRender();
+    var content = pageConf;
     content.put("content", html);
-    return template.apply(pageConf.toRender());
+    return template.apply(pageConf);
 
   }
 }
-

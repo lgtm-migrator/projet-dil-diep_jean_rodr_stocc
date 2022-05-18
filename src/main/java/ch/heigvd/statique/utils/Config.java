@@ -1,19 +1,15 @@
 package ch.heigvd.statique.utils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-public class Config {
-  private Map<String, Object> config;
+public class Config extends HashMap<String, Object> {
 
   /**
    * Config default constructor.
    */
   public Config() {
-    this(new HashMap<>());
+    super();
   }
 
   /**
@@ -21,9 +17,10 @@ public class Config {
    *
    * @param config The configuration map.
    */
-  public Config(Map<String, Object> config) {
-    // Copy the config map to avoid external modification.
-    this.config = new HashMap<String, Object>(config);
+  public Config(Map<String, ?> config) {
+    this();
+
+    putAll(config);
   }
 
   /**
@@ -34,61 +31,105 @@ public class Config {
    */
   public Config(Map<String, Object> config, String prefix) {
     this();
-    add(config, prefix);
+    put(prefix, new Config(config));
   }
 
-  public void addConfig(Object config, String key) {
-    add(config, key);
+  public Config(String key, Object value) {
+    this();
+    put(key, value);
   }
 
-  /**
-   * Get the config for rendering.
-   *
-   * @return The config map.
-   */
-  public Map<String, Object> toRender() {
-    return config;
-  }
+  @Override
+  public Object put(String key, Object value) {
+    String[] prefixes = key.split("\\.", 2);
 
-  /**
-   * Merge this config with another one. This will not affect the original
-   * config. If a key is present in both configs, the value of the other config
-   * will be used.
-   *
-   * @param other The config to merge with.
-   * @return The merged config.
-   */
-  public Config merge(Config other) {
-    HashMap<String, Object> temp = new HashMap<>();
-    temp.put("config", this.config);
-    temp.put("page", other.config);
-    return new Config(temp);
-  }
-
-  private void add(Object config, String key) {
-    // Get all prefixes
-    List<String> prefixes = Arrays.asList(key.split("\\."));
-
-    var keyMap = this.config;
-    var prefixIt = prefixes.iterator();
-    String prefix = prefixIt.next();
-    while(prefixIt.hasNext()) {
-      if (keyMap.containsKey(prefix)) {
-        Object tmp = keyMap.get(prefix);
-        if (tmp instanceof Map<?, ?>) {
-          keyMap = (Map<String, Object>) tmp;
-        } else {
-          throw new RuntimeException("Cannot add config to a non-map");
-        }
-      } else {
-        Map<String, Object> tmp = new HashMap<>();
-        keyMap.put(prefix, tmp);
-        keyMap = tmp;
-      }
-
-      prefix = prefixIt.next();
+    if (prefixes.length == 1) {
+      return super.put(key, value);
     }
 
-    keyMap.put(prefix, config);
+    if (!this.containsKey(prefixes[0])) {
+      this.put(prefixes[0], new Config(prefixes[1], value));
+      return null;
+    }
+
+    if (!(this.get(prefixes[0]) instanceof Config)) {
+      Object tmp = this.get(prefixes[0]);
+      this.put(prefixes[0], new Config(prefixes[1], value));
+      return tmp;
+    }
+
+    return ((Config) this.get(prefixes[0])).put(prefixes[1], value);
+  }
+
+  @Override
+  public void putAll(Map<? extends String, ?> m) {
+    var it = m.entrySet().iterator();
+
+    while (it.hasNext()) {
+      var entry = it.next();
+      var key = entry.getKey();
+      var value = entry.getValue();
+
+      if (value instanceof Map<?, ?>) {
+        var tmp = (Map<String, ?>) value;
+        put(key, new Config(tmp));
+      } else {
+        put(key, value);
+      }
+    }
+  }
+
+  public Object get(String key) {
+    String[] prefixes = key.split("\\.", 2);
+
+    if (prefixes.length == 1) {
+      return super.get(key);
+    }
+
+    if (!this.containsKey(prefixes[0])) {
+      return null;
+    }
+
+    if (!(this.get(prefixes[0]) instanceof Config)) {
+      return null;
+    }
+
+    return ((Config) this.get(prefixes[0])).get(prefixes[1]);
+  }
+
+  public boolean containsKey(String key) {
+    String[] prefixes = key.split("\\.", 2);
+
+    if (prefixes.length == 1) {
+      return super.containsKey(key);
+    }
+
+    if (!this.containsKey(prefixes[0])) {
+      return false;
+    }
+
+    if (!(this.get(prefixes[0]) instanceof Config)) {
+      return false;
+    }
+
+    return ((Config) this.get(prefixes[0])).containsKey(prefixes[1]);
+  }
+
+  public Object remove(String key) {
+    String[] prefixes = key.split("\\.", 2);
+
+    if (prefixes.length == 1) {
+      return super.remove(key);
+    }
+
+    if (!this.containsKey(prefixes[0])) {
+      return null;
+    }
+
+    if (!(this.get(prefixes[0]) instanceof Config)) {
+      return null;
+    }
+
+    return ((Config) this.get(prefixes[0])).remove(prefixes[1]);
   }
 }
