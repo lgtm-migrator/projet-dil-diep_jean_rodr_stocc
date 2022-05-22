@@ -18,7 +18,7 @@ public class Config {
    *
    * @param config the map to use as config.
    */
-  public Config(Map<String, Object> config) {
+  public Config(Map<String, ?> config) {
     // Copy the config map to avoid external modification.
     this.config = new HashMap<>(config);
   }
@@ -28,7 +28,7 @@ public class Config {
    *
    * @param config The configuration map.
    */
-  public Config(String index, Map<String, Object> config) {
+  public Config(String index, Map<String, ?> config) {
     this();
     // Copy the config map to avoid external modification.
     this.config.put(index, new HashMap<>(config));
