@@ -107,7 +107,7 @@ class YamlConvertorTest {
     void testConvertFromFile() throws IOException {
         for (int i = 0; i < filesPath.size(); i++) {
             Config config = YamlConvertor.fromFile(filesPath.get(i).toFile());
-            assertEquals(filesMap.get(i), config);
+            assertEquals(filesMap.get(i), config.toRender());
         }
     }
 
@@ -117,9 +117,9 @@ class YamlConvertorTest {
     @Test
     void testConvertFromString() {
         Config config = YamlConvertor.fromString(yamlStringN);
-        assertEquals(defaultMap, config, "Conversion yaml failed with \\n");
+        assertEquals(defaultMap, config.toRender(), "Conversion yaml failed with \\n");
 
         config = YamlConvertor.fromString(yamlStringRN);
-        assertEquals(defaultMap, config, "Conversion yaml failed with \\r\\n");
+        assertEquals(defaultMap, config.toRender(), "Conversion yaml failed with \\r\\n");
     }
 }

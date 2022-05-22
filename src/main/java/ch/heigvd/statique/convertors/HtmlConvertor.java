@@ -27,6 +27,6 @@ public class HtmlConvertor {
     public static String renderHtml(String html, Config pageConf) throws IOException {
         Handlebars handlebars = new Handlebars();
         Template template = handlebars.compileInline(html);
-        return template.apply(pageConf);
+        return template.apply(pageConf.toRender());
     }
 }

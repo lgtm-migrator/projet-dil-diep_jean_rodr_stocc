@@ -42,8 +42,7 @@ public class Page {
     String[] yamlMd = separateYamlMd(fileContent);
 
     // Merge site configuration with page configuration
-    pageConf = new Config();
-    pageConf.put("config", config);
+    pageConf = new Config("config", config);
     pageConf.put("page", YamlConvertor.fromString(yamlMd[0]));
 
     String html = convertMd(yamlMd[1]);
@@ -93,10 +92,8 @@ public class Page {
   }
 
   private String buildFromTemplate(String html) throws IOException {
-
-    var content = pageConf;
-    content.put("content", html);
-    return template.apply(pageConf);
+    pageConf.put("content", html);
+    return template.apply(pageConf.toRender());
 
   }
 }
