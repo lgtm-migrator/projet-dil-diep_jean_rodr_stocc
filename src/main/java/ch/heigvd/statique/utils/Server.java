@@ -10,6 +10,7 @@ import java.net.InetSocketAddress;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.logging.Logger;
@@ -41,7 +42,7 @@ public class Server {
         ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(10);
         server.setExecutor(threadPoolExecutor);
         server.start();
-        LOG.info(" Server started on port 1234");
+        LOG.info(" Server started on port " + port);
     }
 
     class MyHttpHandler implements HttpHandler {
@@ -85,13 +86,13 @@ public class Server {
                 // Object exists and is a file: accept with response code 200.
                 t.sendResponseHeaders(200, 0);
 
-                // Get page text
-                String pageText = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+                // Get page bytes
+                byte[] pageBytes = FileUtils.readFileToByteArray(file);
+                //BufferedOutputStream
 
                 // Send page content
-                try (BufferedWriter out = new BufferedWriter(
-                        new OutputStreamWriter(t.getResponseBody(), StandardCharsets.UTF_8))) {
-                    out.write(pageText);
+                try (BufferedOutputStream out = new BufferedOutputStream(t.getResponseBody())) {
+                    out.write(pageBytes);
                     out.flush();
                 }
 

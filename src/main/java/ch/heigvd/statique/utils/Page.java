@@ -40,12 +40,21 @@ public class Page {
 
     String fileContent = readFile();
     String[] yamlMd = separateYamlMd(fileContent);
+    String html;
 
-    // Merge site configuration with page configuration
     pageConf = new Config("config", config);
-    pageConf.put("page", YamlConvertor.fromString(yamlMd[0]));
 
-    String html = convertMd(yamlMd[1]);
+    // Markdown file may not have a yaml part (if it's a new one)
+    if (yamlMd.length == 0) {
+      html = "";
+    } else if (yamlMd.length == 1){
+      html = convertMd(yamlMd[0]);
+    } else {
+      // Merge site configuration with page configuration
+      pageConf.put("page", YamlConvertor.fromString(yamlMd[0]));
+      html = convertMd(yamlMd[1]);
+    }
+
     String result = buildFromTemplate(html);
     writeFile(result);
   }
