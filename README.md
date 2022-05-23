@@ -1,6 +1,6 @@
 # Projet DIL
 
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/dil-classroom/projet-dil-diep_jean_rodr_stocc.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/dil-classroom/projet-dil-diep_jean_rodr_stocc/alerts/) [![Language grade: Java](https://img.shields.io/lgtm/grade/java/g/dil-classroom/projet-dil-diep_jean_rodr_stocc.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/dil-classroom/projet-dil-diep_jean_rodr_stocc/context:java)
+[![Java CI with Maven](https://github.com/dil-classroom/projet-dil-diep_jean_rodr_stocc/actions/workflows/maven-ci.yml/badge.svg)](https://github.com/dil-classroom/projet-dil-diep_jean_rodr_stocc/actions/workflows/maven-ci.yml) [![Total alerts](https://img.shields.io/lgtm/alerts/g/dil-classroom/projet-dil-diep_jean_rodr_stocc.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/dil-classroom/projet-dil-diep_jean_rodr_stocc/alerts/) [![Language grade: Java](https://img.shields.io/lgtm/grade/java/g/dil-classroom/projet-dil-diep_jean_rodr_stocc.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/dil-classroom/projet-dil-diep_jean_rodr_stocc/context:java)
 
 Ce projet permet la génération d'un site Web statique à partir de fichier Mardown en ligne de commande.
 
