@@ -1,27 +1,20 @@
 package ch.heigvd.statique.utils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
+
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.LinkedList;
 
 import ch.heigvd.statique.convertors.Builder;
-import com.github.jknack.handlebars.Handlebars;
-import com.github.jknack.handlebars.Template;
-import com.github.jknack.handlebars.io.FileTemplateLoader;
-import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.*;
 
 public class PageTest {
-  private static Path root;
-  private static final LinkedList<Path> filesPathTest = new LinkedList<>();
   private static final LinkedList<Path> filesPathReal = new LinkedList<>();
   private static final LinkedList<String> filesContent = new LinkedList<>();
+  private File testFolder;
 
   private static final String indexHTML = "<html lang=\"en\">\n" +
           "<head>\n" +
@@ -110,20 +103,39 @@ public class PageTest {
     Builder builder = new Builder(p, p.resolve("build"));
     builder.build();
 
+    Path testFolderPath = Path.of("site/build/tests");
 
-    /*filesPathTest.add(Path.of("t/index.html"));
-    filesPathTest.add(Path.of("t/pages/page-1.html"));
-    filesPathTest.add(Path.of("t/pages/page-2.html"));*/
-    filesPathReal.add(Path.of("index.html"));
-    filesPathReal.add(Path.of("pages/page-1.html"));
-    filesPathReal.add(Path.of("pages/page-2.html"));
+    filesPathReal.add(Path.of(testFolderPath + "/index.html"));
+    filesPathReal.add(Path.of(testFolderPath + "/page-1.html"));
+    filesPathReal.add(Path.of(testFolderPath + "/page-2.html"));
     filesContent.add(indexHTML);
     filesContent.add(page1);
     filesContent.add(page2);
 
-    /*for (int i = 0; i < 3; i++) {
-      writeFile(String.valueOf(filesPathTest.get(i)), filesContent.get(i));
-    }*/
+    // Create the test folder
+    this.testFolder = new File(String.valueOf(testFolderPath));
+    if (!this.testFolder.exists()){
+      this.testFolder.mkdirs();
+    }
+
+    for (int i = 0; i < 3; i++) {
+      writeFile(String.valueOf(filesPathReal.get(i)), filesContent.get(i));
+    }
+  }
+
+  /**
+   * Erase test files and test folder
+   *
+   */
+  @AfterEach
+  public void AfterEach() {
+    File file;
+
+    for(Path p : filesPathReal) {
+      file = new File(String.valueOf(p));
+      file.delete();
+    }
+    testFolder.delete();
   }
 
 
@@ -136,7 +148,7 @@ public class PageTest {
   @Test
   void testCreateHTMLFromTemplate() throws IOException {
     for (int i = 0; i < 3; i++) {
-      assertEquals(filesPathReal.get(i), filesContent.get(i));
+      assertEquals(Files.readString(filesPathReal.get(i), StandardCharsets.UTF_8), filesContent.get(i));
     }
   }
 }
