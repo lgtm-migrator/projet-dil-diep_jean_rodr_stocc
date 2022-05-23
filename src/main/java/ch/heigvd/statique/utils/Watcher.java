@@ -94,8 +94,7 @@ public class Watcher implements Runnable {
                     continue;
                 }
 
-
-                if (kind == ENTRY_CREATE) {
+                if (ENTRY_CREATE.equals(kind)) {
                     //this is not a complete path
                     Path path = ev.context();
                     //need to get parent path
@@ -107,10 +106,8 @@ public class Watcher implements Runnable {
                         registerDir(path);
                     } catch (IOException e) {
                         e.printStackTrace();
+                        continue;
                     }
-                }
-
-                if (ENTRY_CREATE.equals(kind)) {
                     System.out.format("File '%s'" + " added.%n", filename);
                 } else if (ENTRY_DELETE.equals(kind)) {
                     System.out.format("File '%s'" + " deleted.%n", filename);
