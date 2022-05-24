@@ -96,9 +96,6 @@
             <goals>
               <goal>report</goal>
             </goals>
-            <configuration>
-              <outputDirectory>${project.target.directory}/jacoco</outputDirectory>
-            </configuration>
           </execution>
           <execution>
             <id>check</id>
