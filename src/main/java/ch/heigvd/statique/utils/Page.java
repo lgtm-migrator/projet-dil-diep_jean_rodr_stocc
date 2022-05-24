@@ -3,7 +3,6 @@ package ch.heigvd.statique.utils;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-
 import ch.heigvd.statique.convertors.YamlConvertor;
 import com.github.jknack.handlebars.Template;
 import org.apache.commons.io.FileUtils;
@@ -40,11 +39,21 @@ public class Page {
 
     String fileContent = readFile();
     String[] yamlMd = separateYamlMd(fileContent);
+    String html;
 
-    // Merge site configuration with page configuration
-    pageConf = config.merge(YamlConvertor.fromString(yamlMd[0]));
+    pageConf = new Config("config", config);
 
-    String html = convertMd(yamlMd[1]);
+    // Markdown file may not have a yaml part (if it's a new one)
+    if (yamlMd.length == 0) {
+      html = "";
+    } else if (yamlMd.length == 1){
+      html = convertMd(yamlMd[0]);
+    } else {
+      // Merge site configuration with page configuration
+      pageConf.put("page", YamlConvertor.fromString(yamlMd[0]));
+      html = convertMd(yamlMd[1]);
+    }
+
     String result = buildFromTemplate(html);
     writeFile(result);
   }
@@ -68,8 +77,8 @@ public class Page {
   }
 
   /**
-   * Separate the YAML and the markdown.
-   * Warning : The markdown needs to contain a yaml bloc code
+   * Separate the YAML and the markdown. Warning : The markdown needs to contain
+   * a yaml bloc code
    *
    * @param fileContent The file content.
    * @return An array of 2 elements, the first one is the YAML, the second one
@@ -91,11 +100,8 @@ public class Page {
   }
 
   private String buildFromTemplate(String html) throws IOException {
-
-    var content = pageConf.toRender();
-    content.put("content", html);
+    pageConf.put("content", html);
     return template.apply(pageConf.toRender());
 
   }
 }
-

@@ -5,8 +5,8 @@ import java.util.concurrent.Callable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import ch.heigvd.statique.convertors.Builder;
-import com.github.jknack.handlebars.Handlebars;
-import com.github.jknack.handlebars.Template;
+import ch.heigvd.statique.utils.Watcher;
+import picocli.CommandLine.Option;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 
@@ -15,6 +15,8 @@ public class Build implements Callable<Integer> {
     @Parameters(paramLabel = "SITE", description = "The site to build")
     public Path site;
 
+    @Option(names = { "--watch"}, description = "Keeps building the site when changes occurred")
+    private boolean haveWatcher = false;
 
     @Override
     public Integer call() throws IOException {
@@ -33,6 +35,11 @@ public class Build implements Callable<Integer> {
         Builder builder = new Builder(site, site.resolve("build"));
         builder.build();
         System.out.println("Build done");
+
+        // Constantly builds the site when changes occurred
+        if (haveWatcher){
+            new Thread(new Watcher(site)).start();
+        }
 
         return 0;
     }
