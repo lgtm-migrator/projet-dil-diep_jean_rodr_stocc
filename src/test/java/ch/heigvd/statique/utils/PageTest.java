@@ -12,9 +12,10 @@ import ch.heigvd.statique.convertors.Builder;
 import org.junit.jupiter.api.*;
 
 public class PageTest {
-  private static final LinkedList<Path> filesPathReal = new LinkedList<>();
+  private static final LinkedList<Path> filesPath = new LinkedList<>();
   private static final LinkedList<String> filesContent = new LinkedList<>();
-  private File testFolder;
+  private Path testFolder;
+
 
   private static final String indexHTML = "<html lang=\"en\">\n" +
           "<head>\n" +
@@ -98,28 +99,22 @@ public class PageTest {
    * @throws IOException File creation exception
    */
   @BeforeEach
-  public void beforeEach() throws IOException {
+  public void CreateTestFiles() throws IOException {
     Path p = Path.of("site");
     Builder builder = new Builder(p, p.resolve("build"));
     builder.build();
 
-    Path testFolderPath = Path.of("site/build/tests");
+    testFolder = Files.createTempDirectory("build_test");
 
-    filesPathReal.add(Path.of(testFolderPath + "/index.html"));
-    filesPathReal.add(Path.of(testFolderPath + "/page-1.html"));
-    filesPathReal.add(Path.of(testFolderPath + "/page-2.html"));
+    filesPath.add(Files.createFile(testFolder.resolve("index.html")));
+    filesPath.add(Files.createFile(testFolder.resolve("page-1.html")));
+    filesPath.add(Files.createFile(testFolder.resolve("page-2.html")));
     filesContent.add(indexHTML);
     filesContent.add(page1);
     filesContent.add(page2);
 
-    // Create the test folder
-    this.testFolder = new File(String.valueOf(testFolderPath));
-    if (!this.testFolder.exists()){
-      this.testFolder.mkdirs();
-    }
-
     for (int i = 0; i < 3; i++) {
-      writeFile(String.valueOf(filesPathReal.get(i)), filesContent.get(i));
+      writeFile(String.valueOf(filesPath.get(i)), filesContent.get(i));
     }
   }
 
@@ -128,14 +123,12 @@ public class PageTest {
    *
    */
   @AfterEach
-  public void AfterEach() {
-    File file;
-
-    for(Path p : filesPathReal) {
-      file = new File(String.valueOf(p));
-      file.delete();
+  public void EraseTestFiles() throws IOException {
+    for (Path path : filesPath) {
+      Files.deleteIfExists(path);
     }
-    testFolder.delete();
+
+    Files.deleteIfExists(testFolder);
   }
 
 
@@ -148,7 +141,7 @@ public class PageTest {
   @Test
   void testCreateHTMLFromTemplate() throws IOException {
     for (int i = 0; i < 3; i++) {
-      assertEquals(Files.readString(filesPathReal.get(i), StandardCharsets.UTF_8), filesContent.get(i));
+      assertEquals(Files.readString(filesPath.get(i), StandardCharsets.UTF_8), filesContent.get(i));
     }
   }
 }
