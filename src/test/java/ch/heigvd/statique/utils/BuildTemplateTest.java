@@ -11,7 +11,7 @@ import java.util.LinkedList;
 import ch.heigvd.statique.convertors.Builder;
 import org.junit.jupiter.api.*;
 
-public class PageTest {
+public class BuildTemplateTest {
   private static final LinkedList<Path> filesPath = new LinkedList<>();
   private static final LinkedList<String> filesContent = new LinkedList<>();
   private Path testFolder;
@@ -130,8 +130,6 @@ public class PageTest {
 
     Files.deleteIfExists(testFolder);
   }
-
-
 
   /**
    * Test the creation of HTML file from template.
