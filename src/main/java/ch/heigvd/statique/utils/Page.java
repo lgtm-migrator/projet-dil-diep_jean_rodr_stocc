@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import ch.heigvd.statique.convertors.YamlConvertor;
-import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
 import org.apache.commons.io.FileUtils;
 import ch.heigvd.statique.convertors.HtmlConvertor;
