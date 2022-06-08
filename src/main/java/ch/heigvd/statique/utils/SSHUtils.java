@@ -1,5 +1,6 @@
 package ch.heigvd.statique.utils;
 
+import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
@@ -16,11 +17,33 @@ public class SSHUtils {
         connection.put(localPath, remotePath);
     }
 
-    public static ChannelSftp connectSftp(String host, String user, int port, String password) throws SftpException, JSchException {
+    public static ChannelSftp connectSftp(String host, int port, String password) throws SftpException, JSchException {
         JSch jsch = new JSch();
-        Session jschSession = jsch.getSession(user, host, port);
-        jschSession.setPassword(password);
+        String[] hostSplit = host.split("@", 2);
+
+        if (hostSplit.length == 1) {
+            hostSplit = new String[] { "root", hostSplit[0] };
+        }
+
+        if (password == null) {
+            jsch.addIdentity("~/.ssh/id_rsa");
+        }
+        jsch.setConfig("StrictHostKeyChecking", "no");
+
+        Session jschSession = jsch.getSession(hostSplit[0], hostSplit[1], port);
+
+        if (password != null) {
+            jschSession.setPassword(password);
+        }
+
         jschSession.connect();
-        return (ChannelSftp) jschSession.openChannel("sftp");
+        Channel channelSftp = jschSession.openChannel("sftp");
+        channelSftp.connect();
+
+        return (ChannelSftp) channelSftp;
+    }
+
+    public static void disconnect(ChannelSftp connection) {
+        connection.disconnect();
     }
 }
