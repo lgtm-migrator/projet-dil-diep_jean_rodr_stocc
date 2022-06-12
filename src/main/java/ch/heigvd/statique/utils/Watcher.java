@@ -1,5 +1,7 @@
 package ch.heigvd.statique.utils;
 
+import static java.nio.file.StandardWatchEventKinds.*;
+
 import ch.heigvd.statique.convertors.Builder;
 
 import java.io.File;
@@ -8,8 +10,6 @@ import java.nio.file.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-
-import static java.nio.file.StandardWatchEventKinds.*;
 
 public class Watcher implements Runnable {
     private static final Map<WatchKey, Path> keyPathMap = new HashMap<>();
@@ -31,22 +31,21 @@ public class Watcher implements Runnable {
      *
      * @param path directory path
      */
-    private void registerDir(Path path) throws
-            IOException {
-        if (!Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS) || path.getFileName().toString().equals("build")) {
+    private void registerDir(Path path) throws IOException {
+        if (!Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS)
+                || path.getFileName().toString().equals("build")) {
             return;
         }
 
         System.out.println("Adding " + path.getFileName() + " folder to watch");
 
-        WatchKey key = path.register(
-                watcher,
-                StandardWatchEventKinds.ENTRY_CREATE,
-                StandardWatchEventKinds.ENTRY_MODIFY,
-                StandardWatchEventKinds.ENTRY_DELETE
-        );
+        WatchKey key =
+                path.register(
+                        watcher,
+                        StandardWatchEventKinds.ENTRY_CREATE,
+                        StandardWatchEventKinds.ENTRY_MODIFY,
+                        StandardWatchEventKinds.ENTRY_DELETE);
         keyPathMap.put(key, path);
-
 
         for (File f : Objects.requireNonNull(path.toFile().listFiles())) {
             registerDir(f.toPath());
@@ -73,8 +72,7 @@ public class Watcher implements Runnable {
                 e.printStackTrace();
                 break;
             }
-            if (key == null)
-                continue;
+            if (key == null) continue;
 
             for (WatchEvent<?> event : key.pollEvents()) {
                 WatchEvent.Kind<?> kind = event.kind();
@@ -83,7 +81,6 @@ public class Watcher implements Runnable {
                 if (kind == OVERFLOW) {
                     continue;
                 }
-
 
                 // The filename is the context of the event.
                 WatchEvent<Path> ev = (WatchEvent<Path>) event;
@@ -95,11 +92,11 @@ public class Watcher implements Runnable {
                 }
 
                 if (ENTRY_CREATE.equals(kind)) {
-                    //this is not a complete path
+                    // this is not a complete path
                     Path path = ev.context();
-                    //need to get parent path
+                    // need to get parent path
                     Path parentPath = keyPathMap.get(key);
-                    //get complete path
+                    // get complete path
                     path = parentPath.resolve(path);
 
                     try {
@@ -127,10 +124,10 @@ public class Watcher implements Runnable {
             // Reset the key -- this step is critical if you want to
             // receive further watch events.  If the key is no longer valid,
             // the directory is inaccessible so exit the loop.
-            if(!key.reset()){
+            if (!key.reset()) {
                 keyPathMap.remove(key);
             }
-            if(keyPathMap.isEmpty()){
+            if (keyPathMap.isEmpty()) {
                 System.err.println("Watcher : key no longer valid.");
                 break;
             }

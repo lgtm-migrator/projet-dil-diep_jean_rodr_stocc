@@ -1,7 +1,9 @@
 package ch.heigvd.statique.convertors;
 
-import org.yaml.snakeyaml.Yaml;
 import ch.heigvd.statique.utils.Config;
+
+import org.yaml.snakeyaml.Yaml;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
