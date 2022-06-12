@@ -13,29 +13,34 @@ import picocli.CommandLine.Parameters;
 @Command(name = "publish", description = "Publish the site")
 public class Publish implements Callable<Integer> {
 
-  @Parameters(paramLabel = "SITE", description = "The site to publish")
-  public Path site;
+  @Parameters(paramLabel = "Site", description = "The site to publish")
+  private Path site;
 
   @Parameters(paramLabel = "Destination dir", description = "The directory on the host where the site will be published")
-  public String destSite;
+  private String destSite;
 
   @Parameters(paramLabel = "Host", description = "The host where to publish the site")
-  public String host;
+  private String host;
 
   @Option(names = "-p", description = "Use password authentication")
-  public boolean usePassword;
+  private boolean usePassword;
 
   @Override
   public Integer call() throws SftpException, JSchException {
-    ChannelSftp connection = null;
+    String password = null;
     if (usePassword) {
+      // Ask for the password
       throw new UnsupportedOperationException("Password authentication is not supported yet");
-    } else {
-      connection = SSHUtils.connectSftp(host, 22, null);
     }
 
-    SSHUtils.cleanRemote(connection, destSite);
+    // Connect to the host with SFTP
+    ChannelSftp connection = SSHUtils.connectSftp(host, 22, password);
+
+    // Delete the remote directory and then copy the site
+    SSHUtils.recursiveFolderDelete(connection, destSite);
     SSHUtils.copy(connection, site.resolve("build"), destSite);
+
+    // Disconnect from the host
     SSHUtils.disconnect(connection);
     return 0;
   }
