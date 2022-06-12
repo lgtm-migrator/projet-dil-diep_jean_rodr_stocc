@@ -2,11 +2,9 @@ package ch.heigvd.statique.commands;
 
 import java.nio.file.Path;
 import java.util.concurrent.Callable;
-
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.SftpException;
-
 import ch.heigvd.statique.utils.SSHUtils;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -37,7 +35,7 @@ public class Publish implements Callable<Integer> {
     }
 
     SSHUtils.cleanRemote(connection, destSite);
-    SSHUtils.copy(connection, site.resolve("build").toString(), destSite);
+    SSHUtils.copy(connection, site.resolve("build"), destSite);
     SSHUtils.disconnect(connection);
     return 0;
   }
