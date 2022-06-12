@@ -22,25 +22,38 @@ public class Publish implements Callable<Integer> {
   @Parameters(paramLabel = "Host", description = "The host where to publish the site")
   private String host;
 
-  @Option(names = "-p", description = "Use password authentication")
-  private boolean usePassword;
+  @Option(names = {"-p", "--password"}, description = "Password", interactive = true)
+  private char[] password;
 
   @Override
   public Integer call() throws SftpException, JSchException {
-    String password = null;
-    if (usePassword) {
-      // Ask for the password
-      throw new UnsupportedOperationException("Password authentication is not supported yet");
+    String str_password = null;
+    if (password != null) {
+      str_password = new String(password);
     }
 
     // Connect to the host with SFTP
-    ChannelSftp connection = SSHUtils.connectSftp(host, 22, password);
+    System.out.println("Connecting to " + host);
+    ChannelSftp connection;
+    try {
+      connection = SSHUtils.connectSftp(host, 22, str_password);
+    } catch (JSchException e) {
+      if (e.getMessage().contains("Auth fail")) {
+        System.out.println("Authentication failed");
+      } else {
+        System.out.println("Connection failed");
+      }
+      return 1;
+    }
 
     // Delete the remote directory and then copy the site
+    System.out.println("Cleaning the remote directory");
     SSHUtils.recursiveFolderDelete(connection, destSite);
+    System.out.println("Copying the site");
     SSHUtils.copy(connection, site.resolve("build"), destSite);
 
     // Disconnect from the host
+    System.out.println("Closing the connection");
     SSHUtils.disconnect(connection);
     return 0;
   }

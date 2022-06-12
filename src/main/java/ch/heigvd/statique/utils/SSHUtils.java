@@ -75,10 +75,7 @@ public class SSHUtils {
                 // Create the remote directory
                 connection.mkdir(remotePath);
             } catch (SftpException e) {
-                // If the remote directory already exists, ignore the error
-                if (!e.getMessage().contains("File exists")) {
-                    throw e;
-                }
+                // If the directory already exists, we can ignore the error
             }
 
             // Go through all the files and subdirectories in the local
