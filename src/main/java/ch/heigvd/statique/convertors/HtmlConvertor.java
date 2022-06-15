@@ -11,6 +11,7 @@ import org.commonmark.renderer.html.HtmlRenderer;
 
 import java.io.IOException;
 
+/** This class converts Markdown syntax to html syntax. */
 public class HtmlConvertor {
 
     /**
@@ -27,6 +28,13 @@ public class HtmlConvertor {
         return htmlRenderer.render(document);
     }
 
+    /**
+     * Applies the a template in a html file using the template engine Handlebars
+     * @param html the content of the html file
+     * @param pageConf the config containing the variables called in the template
+     * @return the html content after applying the template
+     * @throws IOException Couldn't find the pageConf file
+     */
     public static String renderHtml(String html, Config pageConf) throws IOException {
         Handlebars handlebars = new Handlebars();
         Template template = handlebars.compileInline(html);
