@@ -16,11 +16,17 @@ import java.util.Objects;
 
 /** This class is used to convert a Markdown "site" to a static website and apply a template. */
 public class Builder {
+    /** The path of the source directory */
     private final Path source;
+    /** The path of the destination directory */
     private final Path destination;
+    /** The configuration file of the website */
     private Config config;
+    /** The name of the template file */
     private final String templateName;
+    /** The template */
     private Template template;
+    /** The folder containing the template */
     private String templateFolder = "template";
 
     /**
