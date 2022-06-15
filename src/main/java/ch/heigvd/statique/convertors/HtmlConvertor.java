@@ -30,4 +30,5 @@ public class HtmlConvertor {
         Template template = handlebars.compileInline(html);
         return template.apply(pageConf.toRender());
     }
+
 }
