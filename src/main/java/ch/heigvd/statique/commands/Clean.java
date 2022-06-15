@@ -1,12 +1,14 @@
 package ch.heigvd.statique.commands;
 
+import ch.heigvd.statique.utils.Utils;
+
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.Callable;
-import ch.heigvd.statique.utils.Utils;
 
 @Command(name = "clean", description = "Clean a statique site")
 public class Clean implements Callable<Integer> {

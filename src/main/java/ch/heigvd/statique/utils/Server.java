@@ -3,20 +3,19 @@ package ch.heigvd.statique.utils;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
+
 import org.apache.commons.io.FileUtils;
 
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.logging.Logger;
 
 public class Server {
-    private final static Logger LOG = Logger.getLogger(Server.class.getName());
+    private static final Logger LOG = Logger.getLogger(Server.class.getName());
     private final Path site;
     private final int port;
 
@@ -39,7 +38,8 @@ public class Server {
     public void start() throws IOException {
         HttpServer server = HttpServer.create(new InetSocketAddress(port), 1);
         server.createContext("/", new MyHttpHandler());
-        ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(10);
+        ThreadPoolExecutor threadPoolExecutor =
+                (ThreadPoolExecutor) Executors.newFixedThreadPool(10);
         server.setExecutor(threadPoolExecutor);
         server.start();
         LOG.info(" Server started on port " + port);
@@ -49,11 +49,13 @@ public class Server {
 
         /**
          * Handle http request
+         *
          * @param t http exchange
          * @throws IOException Couldn't respond to the client request
          */
         public void handle(HttpExchange t) throws IOException {
-            // Modified code from : http://www.microhowto.info/howto/serve_web_pages_using_an_embedded_http_server_in_java.html
+            // Modified code from :
+            // http://www.microhowto.info/howto/serve_web_pages_using_an_embedded_http_server_in_java.html
 
             // Gets request
             URI uri = t.getRequestURI();
@@ -66,7 +68,7 @@ public class Server {
 
             LOG.info("File path : " + file.getPath());
 
-            if(!file.getPath().startsWith(site.toString())){
+            if (!file.getPath().startsWith(site.toString())) {
                 // Suspected path traversal attack: reject with 403 error.
                 String response = "403 (Forbidden)\n";
                 t.sendResponseHeaders(403, response.length());
@@ -88,7 +90,7 @@ public class Server {
 
                 // Get page bytes
                 byte[] pageBytes = FileUtils.readFileToByteArray(file);
-                //BufferedOutputStream
+                // BufferedOutputStream
 
                 // Send page content
                 try (BufferedOutputStream out = new BufferedOutputStream(t.getResponseBody())) {

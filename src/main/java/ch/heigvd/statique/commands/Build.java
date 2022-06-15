@@ -1,21 +1,25 @@
 package ch.heigvd.statique.commands;
 
-import java.io.IOException;
-import java.util.concurrent.Callable;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import ch.heigvd.statique.convertors.Builder;
 import ch.heigvd.statique.utils.Watcher;
-import picocli.CommandLine.Option;
+
 import picocli.CommandLine.Command;
+import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.concurrent.Callable;
 
 @Command(name = "build", description = "Build a static site")
 public class Build implements Callable<Integer> {
     @Parameters(paramLabel = "SITE", description = "The site to build")
     public Path site;
 
-    @Option(names = { "--watch"}, description = "Keeps building the site when changes occurred")
+    @Option(
+            names = {"--watch"},
+            description = "Keeps building the site when changes occurred")
     private boolean haveWatcher = false;
 
     @Override
@@ -37,7 +41,7 @@ public class Build implements Callable<Integer> {
         System.out.println("Build done");
 
         // Constantly builds the site when changes occurred
-        if (haveWatcher){
+        if (haveWatcher) {
             new Thread(new Watcher(site)).start();
         }
 

@@ -1,0 +1,14 @@
+name: Format
+
+on: [push]
+
+jobs:
+  formatting:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.TOKEN }} # To allow push on main
+      - uses: axel-op/googlejavaformat-action@v3
+        with:
+          args: "--replace --aosp"

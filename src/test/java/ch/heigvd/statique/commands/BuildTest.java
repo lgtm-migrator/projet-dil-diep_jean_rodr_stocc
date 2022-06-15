@@ -1,19 +1,21 @@
 package ch.heigvd.statique.commands;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import ch.heigvd.statique.convertors.Builder;
 import ch.heigvd.statique.utils.Utils;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import picocli.CommandLine;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Path;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BuildTest {
     Path build, dirNotExist;
@@ -35,17 +37,13 @@ public class BuildTest {
         dirNotExist = build.resolve("not_a_folder");
     }
 
-    /**
-     * Clean up the build folder made only to test if builder's working
-     */
+    /** Clean up the build folder made only to test if builder's working */
     @AfterEach
     void EraseFolder() throws IOException {
         Utils.deleteRecursive(Path.of("site/build"));
     }
 
-    /**
-     * Test to build with the build dir
-     */
+    /** Test to build with the build dir */
     @Test
     void buildWithBuild() throws Exception {
         try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
@@ -57,9 +55,7 @@ public class BuildTest {
         }
     }
 
-    /**
-     * Test to build in a folder that does not exist.
-     */
+    /** Test to build in a folder that does not exist. */
     @Test
     void buildFolderNotExist() throws Exception {
         try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
@@ -68,13 +64,10 @@ public class BuildTest {
             int exitCode = new CommandLine(new Build()).execute(dirNotExist.toString());
             assertEquals(-1, exitCode);
             assertTrue(output.toString().contains("Destination does not exists"));
-
         }
     }
 
-    /**
-     * Test to build on a file.
-     */
+    /** Test to build on a file. */
     @Test
     void buildOnAFile() throws Exception {
         try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
