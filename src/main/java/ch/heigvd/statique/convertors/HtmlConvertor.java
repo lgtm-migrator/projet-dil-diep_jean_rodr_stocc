@@ -30,6 +30,7 @@ public class HtmlConvertor {
 
     /**
      * Applies the a template in a html file using the template engine Handlebars
+     *
      * @param html the content of the html file
      * @param pageConf the config containing the variables called in the template
      * @return the html content after applying the template
