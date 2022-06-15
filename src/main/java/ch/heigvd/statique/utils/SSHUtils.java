@@ -1,13 +1,14 @@
 package ch.heigvd.statique.utils;
 
-import java.io.File;
-import java.nio.file.Path;
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.SftpException;
+
+import java.io.File;
+import java.nio.file.Path;
 
 public class SSHUtils {
 
@@ -16,10 +17,10 @@ public class SSHUtils {
      *
      * @param connection The connection to the remote host
      * @param remotePath The remote path to delete
-     * @throws SftpException If an error occurs while deleting the remote
-     *                       directory
+     * @throws SftpException If an error occurs while deleting the remote directory
      */
-    public static void recursiveFolderDelete(ChannelSftp connection, String remotePath) throws SftpException {
+    public static void recursiveFolderDelete(ChannelSftp connection, String remotePath)
+            throws SftpException {
         // Save the current working directory to go back to it after the
         // deletion
         String current = connection.pwd();
@@ -61,12 +62,13 @@ public class SSHUtils {
      * Copy a folder and all its subdirectories to a remote directory
      *
      * @param connection The connection to the remote host
-     * @param localPath  The local path to copy
+     * @param localPath The local path to copy
      * @param remotePath The remote path where to copy
-     * @throws SftpException If an error occurs while copying the local
-     *                       directory to the remote directory
+     * @throws SftpException If an error occurs while copying the local directory to the remote
+     *     directory
      */
-    public static void copy(ChannelSftp connection, Path localPath, String remotePath) throws SftpException {
+    public static void copy(ChannelSftp connection, Path localPath, String remotePath)
+            throws SftpException {
         File localFile = localPath.toFile();
 
         // If the local path is a directory, go through it recursively
@@ -91,16 +93,15 @@ public class SSHUtils {
 
     /**
      * Connect to a remote host using SSH and return a channel for SFTP
-     * 
-     * @param host     The host to connect to, the format is the same as for ssh
-     *                 so user@host, if no user is specified, the default user
-     *                 is root
-     * @param port     The port to connect to
-     * @param password The password to use, if null then key-based
-     *                 authentication is used
+     *
+     * @param host The host to connect to, the format is the same as for ssh so user@host, if no
+     *     user is specified, the default user is root
+     * @param port The port to connect to
+     * @param password The password to use, if null then key-based authentication is used
      * @return A channel for SFTP
      */
-    public static ChannelSftp connectSftp(String host, int port, String password) throws SftpException, JSchException {
+    public static ChannelSftp connectSftp(String host, int port, String password)
+            throws SftpException, JSchException {
         JSch jsch = new JSch();
 
         // Separate the user and host
@@ -137,10 +138,9 @@ public class SSHUtils {
 
     /**
      * Disconnect from a remote host
-     * 
+     *
      * @param connection The connection to the remote host
-     * @throws JSchException If an error occurs while disconnecting from the
-     *                       remote
+     * @throws JSchException If an error occurs while disconnecting from the remote
      */
     public static void disconnect(ChannelSftp connection) throws JSchException {
         connection.disconnect();

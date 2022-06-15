@@ -9,15 +9,15 @@ import java.io.InputStream;
 import java.util.concurrent.Callable;
 
 @Command(
-    name = "statique",
-    description = "A brand new static site generator.",
-    subcommands = {
-      Init.class,
-      Clean.class,
-      Build.class,
-      Serve.class,
-      Publish.class,
-    })
+        name = "statique",
+        description = "A brand new static site generator.",
+        subcommands = {
+            Init.class,
+            Clean.class,
+            Build.class,
+            Serve.class,
+            Publish.class,
+        })
 public class Statique implements Callable<Integer> {
     @CommandLine.Option(
             names = "--version",
