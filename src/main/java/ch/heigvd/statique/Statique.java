@@ -15,6 +15,7 @@ import picocli.CommandLine.Command;
       Clean.class,
       Build.class,
       Serve.class,
+      Publish.class,
     })
 public class Statique implements Callable<Integer> {
   @CommandLine.Option(names = "--version", description = "Show the generator's version in terminal")
