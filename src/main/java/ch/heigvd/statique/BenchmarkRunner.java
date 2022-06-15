@@ -28,8 +28,8 @@ public class BenchmarkRunner {
     public int num;
 
     /**
-     * Configuration parameters for the benchmarks.
-     * From the command line: $ mvn clean install before running the benchmark
+     * Configuration parameters for the benchmarks. From the command line: $ mvn clean install
+     * before running the benchmark
      *
      * @param args
      * @throws RunnerException
@@ -47,9 +47,7 @@ public class BenchmarkRunner {
         new Runner(opt).run();
     }
 
-    /**
-     * Benchmark function for the markdown to html rendering.
-     */
+    /** Benchmark function for the markdown to html rendering. */
     @Benchmark
     public void markdownRender() {
         for (int i = 0; i < num; i++) {
@@ -84,9 +82,7 @@ public class BenchmarkRunner {
         }
     }
 
-    /**
-     * Benchmark function for the markdown to html rendering optimized.
-     */
+    /** Benchmark function for the markdown to html rendering optimized. */
     @Benchmark
     public void markdownRenderOptimized() {
         Parser parser = Parser.builder().build();
