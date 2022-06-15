@@ -19,9 +19,6 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 
 import java.util.concurrent.TimeUnit;
 
-/**
- * http://hg.openjdk.java.net/code-tools/jmh/file/tip/jmh-samples/src/main/java/org/openjdk/jmh/samples/
- */
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MICROSECONDS)
 @State(Scope.Benchmark)
@@ -31,7 +28,8 @@ public class BenchmarkRunner {
     public int num;
 
     /**
-     * From the command line: $ mvn clean install $ java -jar target/benchmarks.jar BenchmarkRunner
+     * Configuration parameters for the benchmarks.
+     * From the command line: $ mvn clean install before running the benchmark
      *
      * @param args
      * @throws RunnerException
@@ -49,6 +47,9 @@ public class BenchmarkRunner {
         new Runner(opt).run();
     }
 
+    /**
+     * Benchmark function for the markdown to html rendering.
+     */
     @Benchmark
     public void markdownRender() {
         for (int i = 0; i < num; i++) {
@@ -83,6 +84,9 @@ public class BenchmarkRunner {
         }
     }
 
+    /**
+     * Benchmark function for the markdown to html rendering optimized.
+     */
     @Benchmark
     public void markdownRenderOptimized() {
         Parser parser = Parser.builder().build();
