@@ -45,7 +45,7 @@ La commande `statique` permet de générer un site web statique à partir d'un f
     `build <PATH>` : Construit le site web statique à partir du fichier Markdown.\
     `serve <PATH> <PORT>` : Lance le serveur web statique construit.\
     `clean <PATH>` : Supprime les fichiers générés.\
-    `publish <PATH> <remote_path> <ssh_url>` : Publie le site web statique sur un dépôt GIT en SSH.
+    `publish <PATH> <remote_path> <ssh_url>` : Envoie les fichiers du site web statique dans un répertoire distant au travers d'un SSH.
 
 Précisions pour la commande `publish`:\
 Le paramètre `<ssh_url>` s'écrit de la même manière qu'une URL SSH classique, ce qui permet d'écrire simplement `url` ou `user@url`.\
