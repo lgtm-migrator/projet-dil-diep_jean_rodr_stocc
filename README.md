@@ -49,7 +49,7 @@ La commande `statique` permet de générer un site web statique à partir d'un f
 
 Précisions pour la commande `publish`:\
 Le paramètre `<ssh_url>` s'écrit de la même manière qu'une URL SSH classique, ce qui permet d'écrire simplement `url` ou `user@url`.\
-Par défaut, l'application récupère les clés SSH dans `~/.ssh/id_rsa`, cependant, il est possible d'ajouté l'option `-p` ou `--password` afin d'utiliser un mot de passe (celui-ci étant demandé **après** avoir lancé la commande).
+Par défaut, l'application récupère les clés SSH dans `~/.ssh/id_rsa`, cependant, il est possible d'ajouter l'option `-p` ou `--password` afin d'utiliser un mot de passe (celui-ci étant demandé **après** avoir lancé la commande).
 
 Sur les commandes `build` et `serve`, il y a la possibilité d'appliquer des changements sur le fichier *Markdown* en même temps que le site web statique est en cours d'execution en ajoutant l'option `--watch`.
 
