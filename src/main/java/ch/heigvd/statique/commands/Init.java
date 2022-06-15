@@ -1,5 +1,10 @@
 package ch.heigvd.statique.commands;
 
+import ch.heigvd.statique.utils.Utils;
+
+import picocli.CommandLine.Command;
+import picocli.CommandLine.Parameters;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -7,23 +12,20 @@ import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.concurrent.Callable;
 
-import ch.heigvd.statique.utils.Utils;
-import picocli.CommandLine.Command;
-import picocli.CommandLine.Parameters;
-
 @Command(name = "init", description = "Initialize a static site directory")
 public class Init implements Callable<Integer> {
 
     private static final String DEFAULT_DIR_NAME = "default/";
 
-    private static final LinkedList<String> DEFAULT_FILE_LIST = new LinkedList<String>() {
-        {
-            add("index.md");
-            add("config.yaml");
-            add("template/layout.hbs");
-            add("template/menu.hbs");
-        }
-    };
+    private static final LinkedList<String> DEFAULT_FILE_LIST =
+            new LinkedList<String>() {
+                {
+                    add("index.md");
+                    add("config.yaml");
+                    add("template/layout.hbs");
+                    add("template/menu.hbs");
+                }
+            };
 
     @Parameters(paramLabel = "SITE", description = "The site to build")
     public Path site;

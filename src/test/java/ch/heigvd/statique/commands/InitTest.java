@@ -3,17 +3,20 @@ package ch.heigvd.statique.commands;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import picocli.CommandLine;
+
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import org.apache.commons.io.FileUtils;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import picocli.CommandLine;
 
 public class InitTest {
     Path root, notADir, isAFile;
@@ -30,18 +33,14 @@ public class InitTest {
         notADir = root.resolve("not_a_dir");
     }
 
-    /**
-     * Clean up temporary dir and file
-     */
+    /** Clean up temporary dir and file */
     @AfterEach
     void tearDown() throws IOException {
         FileUtils.deleteDirectory(root.toFile());
         Files.deleteIfExists(isAFile);
     }
 
-    /**
-     * Test that the command create the needed files.
-     */
+    /** Test that the command create the needed files. */
     @Test
     void inDirFilesCreated() {
         new CommandLine(new Init()).execute(root.toString());
@@ -53,9 +52,7 @@ public class InitTest {
         assertTrue(Files.isRegularFile(config));
     }
 
-    /**
-     * Test that the command create not empty files.
-     */
+    /** Test that the command create not empty files. */
     @Test
     void filesContainsSomething() throws FileNotFoundException, IOException {
         new CommandLine(new Init()).execute(root.toString());
@@ -68,8 +65,8 @@ public class InitTest {
     }
 
     /**
-     * Test that the command create the needed directory and files if the
-     * directory does not yet exist.
+     * Test that the command create the needed directory and files if the directory does not yet
+     * exist.
      */
     @Test
     void inNotADirFilesCreated() {
@@ -83,9 +80,7 @@ public class InitTest {
         assertTrue(Files.isRegularFile(config));
     }
 
-    /**
-     * Test that the command fail if the destination is a file.
-     */
+    /** Test that the command fail if the destination is a file. */
     @Test
     void inAFile() throws Exception {
         try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
@@ -97,10 +92,7 @@ public class InitTest {
         }
     }
 
-    /**
-     * Test that the command does not create the config file if it already
-     * exists.
-     */
+    /** Test that the command does not create the config file if it already exists. */
     @Test
     void fileIndexDoesExist() throws Exception {
         Path index = root.resolve("index.md");
@@ -124,10 +116,7 @@ public class InitTest {
         }
     }
 
-    /**
-     * Test that the command does not create the config file if it already
-     * exists.
-     */
+    /** Test that the command does not create the config file if it already exists. */
     @Test
     void fileConfigDoesExist() throws Exception {
         Path index = root.resolve("index.md");
@@ -151,10 +140,7 @@ public class InitTest {
         }
     }
 
-    /**
-     * Test that the command does not create the index and config file if they
-     * already exist.
-     */
+    /** Test that the command does not create the index and config file if they already exist. */
     @Test
     void fileIndexAndConfigDoesExist() throws Exception {
         Path index = root.resolve("index.md");

@@ -1,17 +1,20 @@
 package ch.heigvd.statique.convertors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import ch.heigvd.statique.utils.Config;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.yaml.snakeyaml.Yaml;
-import ch.heigvd.statique.utils.Config;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Date;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -21,16 +24,22 @@ class YamlConvertorTest {
     private static final LinkedList<Path> filesPath = new LinkedList<>();
     private static final LinkedList<LinkedList<String>> filesText = new LinkedList<>();
     private static final LinkedList<Map<String, Object>> filesMap = new LinkedList<>();
-    private static final LinkedList<String> defaultText = new LinkedList<>(
-            Arrays.asList("titre: Mon premier article", "auteur: Jean François", "date: 2021-03-10", "chiffre: 25"));
-    private static final Map<String, Object> defaultMap = new HashMap<>() {
-        {
-            put("titre", "Mon premier article");
-            put("auteur", "Jean François");
-            put("date", new Yaml().loadAs("2021-03-10", Date.class));
-            put("chiffre", 25);
-        }
-    };
+    private static final LinkedList<String> defaultText =
+            new LinkedList<>(
+                    Arrays.asList(
+                            "titre: Mon premier article",
+                            "auteur: Jean François",
+                            "date: 2021-03-10",
+                            "chiffre: 25"));
+    private static final Map<String, Object> defaultMap =
+            new HashMap<>() {
+                {
+                    put("titre", "Mon premier article");
+                    put("auteur", "Jean François");
+                    put("date", new Yaml().loadAs("2021-03-10", Date.class));
+                    put("chiffre", 25);
+                }
+            };
     private static String yamlStringN;
     private static String yamlStringRN;
 
@@ -38,12 +47,14 @@ class YamlConvertorTest {
      * Writes inside a file
      *
      * @param filePath file path
-     * @param lines    text on each lines
+     * @param lines text on each lines
      * @throws IOException BufferWriter exception
      */
     private static void writeFile(String filePath, LinkedList<String> lines) throws IOException {
-        try (BufferedWriter out = new BufferedWriter(
-                new OutputStreamWriter(new FileOutputStream(filePath), StandardCharsets.UTF_8))) {
+        try (BufferedWriter out =
+                new BufferedWriter(
+                        new OutputStreamWriter(
+                                new FileOutputStream(filePath), StandardCharsets.UTF_8))) {
             for (String line : lines) {
                 out.write(line);
                 out.newLine();
@@ -71,9 +82,7 @@ class YamlConvertorTest {
         writeFile(filesPath.getLast().toString(), filesText.getLast());
     }
 
-    /**
-     * Set the yaml strings from the default text.
-     */
+    /** Set the yaml strings from the default text. */
     @BeforeAll
     static void setYamlString() {
         yamlStringN = "";
@@ -100,7 +109,7 @@ class YamlConvertorTest {
 
     /**
      * Test yaml conversion from a file.
-     * 
+     *
      * @throws IOException
      */
     @Test
@@ -111,9 +120,7 @@ class YamlConvertorTest {
         }
     }
 
-    /**
-     * Test yaml conversion from a string.
-     */
+    /** Test yaml conversion from a string. */
     @Test
     void testConvertFromString() {
         Config config = YamlConvertor.fromString(yamlStringN);

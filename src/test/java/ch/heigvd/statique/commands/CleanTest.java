@@ -1,27 +1,27 @@
 package ch.heigvd.statique.commands;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import picocli.CommandLine;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import picocli.CommandLine;
-
 public class CleanTest {
     Path root, dir, file1, file2;
     Path buildRoot, buildPagesDir, buildIndex, buildPage;
     Path dirNotExist;
 
-    /**
-     * Set up the directory for each test
-     */
+    /** Set up the directory for each test */
     @BeforeEach
     void setUp() throws IOException {
         root = Files.createTempDirectory("statique_");
@@ -39,9 +39,7 @@ public class CleanTest {
         dirNotExist = root.resolve("not_a_folder");
     }
 
-    /**
-     * Delete all temporary files.
-     */
+    /** Delete all temporary files. */
     @AfterEach
     void tearDown() throws IOException {
         Files.deleteIfExists(buildPage);
@@ -54,9 +52,7 @@ public class CleanTest {
         Files.deleteIfExists(root);
     }
 
-    /**
-     * Create the build directory with the needed files.
-     */
+    /** Create the build directory with the needed files. */
     void createBuild() throws IOException {
         Files.createDirectories(buildRoot);
         Files.createDirectories(buildPagesDir);
@@ -64,10 +60,7 @@ public class CleanTest {
         Files.createFile(buildPage);
     }
 
-    /**
-     * Verify that the directory is correctly cleaned without touching
-     * other files.
-     */
+    /** Verify that the directory is correctly cleaned without touching other files. */
     void assertCleaned() {
         assertTrue(Files.exists(root));
         assertTrue(Files.exists(dir));
@@ -81,9 +74,7 @@ public class CleanTest {
         assertFalse(Files.exists(buildPage));
     }
 
-    /**
-     * Test to clean without the build dir.
-     */
+    /** Test to clean without the build dir. */
     @Test
     void cleanNoBuild() throws Exception {
         try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
@@ -96,9 +87,7 @@ public class CleanTest {
         }
     }
 
-    /**
-     * Test to clean with the build dir
-     */
+    /** Test to clean with the build dir */
     @Test
     void cleanWithBuild() throws Exception {
         createBuild();
@@ -112,9 +101,7 @@ public class CleanTest {
         }
     }
 
-    /**
-     * Test to clean in a folder that does not exist.
-     */
+    /** Test to clean in a folder that does not exist. */
     @Test
     void cleanFolderNotExist() throws Exception {
         try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
@@ -123,13 +110,10 @@ public class CleanTest {
             int exitCode = new CommandLine(new Clean()).execute(dirNotExist.toString());
             assertEquals(-1, exitCode);
             assertTrue(output.toString().contains("Destination does not exists"));
-
         }
     }
 
-    /**
-     * Test to clean on a file.
-     */
+    /** Test to clean on a file. */
     @Test
     void cleanOnAFile() throws Exception {
         try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {

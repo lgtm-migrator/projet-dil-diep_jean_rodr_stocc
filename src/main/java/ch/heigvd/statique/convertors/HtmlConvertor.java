@@ -1,8 +1,10 @@
 package ch.heigvd.statique.convertors;
 
 import ch.heigvd.statique.utils.Config;
+
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
+
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
