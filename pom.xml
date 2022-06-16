@@ -48,6 +48,13 @@
         <configuration>
           <source>11</source>
           <target>11</target>
+          <annotationProcessorPaths>
+            <path>
+              <groupId>org.openjdk.jmh</groupId>
+              <artifactId>jmh-generator-annprocess</artifactId>
+              <version>1.33</version>
+            </path>
+          </annotationProcessorPaths>
         </configuration>
       </plugin>
       <plugin>
@@ -149,6 +156,17 @@
       <groupId>com.jcraft</groupId>
       <artifactId>jsch</artifactId>
       <version>0.1.55</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.openjdk.jmh</groupId>
+      <artifactId>jmh-core</artifactId>
+      <version>1.33</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openjdk.jmh</groupId>
+      <artifactId>jmh-generator-annprocess</artifactId>
+      <version>1.33</version>
     </dependency>
 
     <!-- Testing-->
