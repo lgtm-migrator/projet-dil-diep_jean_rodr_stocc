@@ -12,8 +12,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.Callable;
 
+/** This command builds a statique site from a provided folder name. */
 @Command(name = "build", description = "Build a static site")
 public class Build implements Callable<Integer> {
+
+    /** The site to build */
     @Parameters(paramLabel = "SITE", description = "The site to build")
     public Path site;
 
@@ -22,6 +25,7 @@ public class Build implements Callable<Integer> {
             description = "Keeps building the site when changes occurred")
     private boolean haveWatcher = false;
 
+    /** Calls the builder to build the provided site. */
     @Override
     public Integer call() throws IOException {
         // Check that the site folder exists.

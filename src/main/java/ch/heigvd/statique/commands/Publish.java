@@ -13,26 +13,32 @@ import picocli.CommandLine.Parameters;
 import java.nio.file.Path;
 import java.util.concurrent.Callable;
 
+/** This command publishes the site. */
 @Command(name = "publish", description = "Publish the site")
 public class Publish implements Callable<Integer> {
 
+    /** The site to publish */
     @Parameters(paramLabel = "Site", description = "The site to publish")
     private Path site;
 
+    /** The directory where the site will be published */
     @Parameters(
             paramLabel = "Destination dir",
             description = "The directory on the host where the site will be published")
     private String destSite;
 
+    /** The host on which the site will be published */
     @Parameters(paramLabel = "Host", description = "The host where to publish the site")
     private String host;
 
+    /** The password */
     @Option(
             names = {"-p", "--password"},
             description = "Password",
             interactive = true)
     private char[] password;
 
+    /** Connects to the host and copy the site */
     @Override
     public Integer call() throws SftpException, JSchException {
         String str_password = null;

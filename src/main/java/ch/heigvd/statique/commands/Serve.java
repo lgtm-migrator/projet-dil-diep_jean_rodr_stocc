@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.concurrent.Callable;
 
+/** This command creates and starts the server. */
 @Command(
         name = "serve",
         description =
@@ -27,6 +28,7 @@ public class Serve implements Callable<Integer> {
             description = "Keeps building the site when changes occurred")
     private boolean haveWatcher = false;
 
+    /** Creates the server object and starts it */
     @Override
     public Integer call() throws IOException {
         // Constantly builds the site when changes occurred
