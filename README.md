@@ -81,9 +81,9 @@ Ainsi, les différentes pages *HTML* seront générées dans le dossier `./mon/s
 5. Si vous souhaitez nettoyer le projet et supprimer les fichiers générés, utilisez la commande `statique clean ./mon/site`.
 
 
-# Diagramme UML
+# Diagrammes
 
-Les documents contenant les digrammes UML sont disponible [ICI][uml_diag].
+Les documents contenant le diagramme UML et le diagramme de cas d'utilisation sont disponibles [ICI][uml_diag].
 
 [picocli]: <https://picocli.info>
 [junit]: <https://junit.org/junit5>
