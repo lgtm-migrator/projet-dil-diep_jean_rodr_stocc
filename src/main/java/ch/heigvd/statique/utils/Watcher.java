@@ -13,7 +13,7 @@ import java.util.Objects;
 
 /** This class watches for change in a given folder. */
 public class Watcher implements Runnable {
-    /** A map of the watchkey and the related path*/
+    /** A map of the watchkey and the related path */
     private static final Map<WatchKey, Path> keyPathMap = new HashMap<>();
     /** The watcher */
     private final WatchService watcher;
@@ -31,8 +31,8 @@ public class Watcher implements Runnable {
     }
 
     /**
-     * Registers the folder to watch
-     * from : https://www.logicbig.com/tutorials/core-java-tutorial/java-nio/java-watch-service.html
+     * Registers the folder to watch from :
+     * https://www.logicbig.com/tutorials/core-java-tutorial/java-nio/java-watch-service.html
      *
      * @param path directory path
      */
@@ -57,9 +57,7 @@ public class Watcher implements Runnable {
         }
     }
 
-    /**
-     * Starts watching
-     */
+    /** Starts watching */
     @Override
     public void run() {
         // from : https://docs.oracle.com/javase/tutorial/essential/io/notification.html

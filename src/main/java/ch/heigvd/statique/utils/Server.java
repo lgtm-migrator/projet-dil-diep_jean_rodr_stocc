@@ -14,7 +14,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.logging.Logger;
 
-/** This class creates a server locally hosted and gives the user the opportunity to connect to it using a browser. */
+/**
+ * This class creates a server locally hosted and gives the user the opportunity to connect to it
+ * using a browser.
+ */
 public class Server {
     /** Where the server's logs are written */
     private static final Logger LOG = Logger.getLogger(Server.class.getName());
