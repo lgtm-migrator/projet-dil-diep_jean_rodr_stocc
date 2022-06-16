@@ -5,6 +5,7 @@ import org.apache.commons.io.FileUtils;
 import java.io.IOException;
 import java.nio.file.Path;
 
+/** This class can copy files and delete directories. */
 public class Utils {
 
     /**
