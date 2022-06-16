@@ -12,11 +12,14 @@ import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.concurrent.Callable;
 
+/** This command initializes a static site directory. */
 @Command(name = "init", description = "Initialize a static site directory")
 public class Init implements Callable<Integer> {
 
+    /** The default directory name */
     private static final String DEFAULT_DIR_NAME = "default/";
 
+    /** The default list of file */
     private static final LinkedList<String> DEFAULT_FILE_LIST =
             new LinkedList<String>() {
                 {
@@ -27,9 +30,11 @@ public class Init implements Callable<Integer> {
                 }
             };
 
+    /** The site to build */
     @Parameters(paramLabel = "SITE", description = "The site to build")
     public Path site;
 
+    /** Initializes the static site directory */
     @Override
     public Integer call() throws URISyntaxException, IOException {
         // Verify that destination is a directory.

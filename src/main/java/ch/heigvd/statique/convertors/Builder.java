@@ -14,13 +14,19 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
 
-/** This class is used to convert a Markdown "site" to a static website. */
+/** This class is used to convert a Markdown "site" to a static website and apply a template. */
 public class Builder {
-    private Path source;
-    private Path destination;
+    /** The path of the source directory */
+    private final Path source;
+    /** The path of the destination directory */
+    private final Path destination;
+    /** The configuration file of the website */
     private Config config;
-    private String templateName;
+    /** The name of the template file */
+    private final String templateName;
+    /** The template */
     private Template template;
+    /** The folder containing the template */
     private String templateFolder = "template";
 
     /**
@@ -36,7 +42,7 @@ public class Builder {
     }
 
     /**
-     * Get the configuration of the website.
+     * Gets the configuration of the website.
      *
      * @return the configuration of the website
      */
@@ -44,7 +50,7 @@ public class Builder {
         return config;
     }
 
-    /** Build the website. */
+    /** Builds the website. */
     public void build() throws IOException {
         Path configFile;
 
@@ -79,8 +85,8 @@ public class Builder {
     }
 
     /**
-     * Explores a directory and creates a build directory When the explorer sees a directory, it
-     * recursively explores the directory and copies it When the explorer sees a file, it converts
+     * Explores a directory and creates a build directory. When the explorer sees a directory, it
+     * recursively explores the directory and copies it. When the explorer sees a file, it converts
      * the file or copy it in the build directory.
      *
      * @param rootDirectory root directory

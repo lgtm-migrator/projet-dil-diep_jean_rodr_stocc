@@ -11,9 +11,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/** This class watches for change in a given folder. */
 public class Watcher implements Runnable {
+    /** A map of the watchkey and the related path */
     private static final Map<WatchKey, Path> keyPathMap = new HashMap<>();
+    /** The watcher */
     private final WatchService watcher;
+    /** The path of the directory to watch */
     private final Path dir;
 
     /**
@@ -27,7 +31,8 @@ public class Watcher implements Runnable {
     }
 
     /**
-     * from : https://www.logicbig.com/tutorials/core-java-tutorial/java-nio/java-watch-service.html
+     * Registers the folder to watch from :
+     * https://www.logicbig.com/tutorials/core-java-tutorial/java-nio/java-watch-service.html
      *
      * @param path directory path
      */
@@ -52,6 +57,7 @@ public class Watcher implements Runnable {
         }
     }
 
+    /** Starts watching */
     @Override
     public void run() {
         // from : https://docs.oracle.com/javase/tutorial/essential/io/notification.html

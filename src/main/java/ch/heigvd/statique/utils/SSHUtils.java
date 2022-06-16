@@ -10,6 +10,7 @@ import com.jcraft.jsch.SftpException;
 import java.io.File;
 import java.nio.file.Path;
 
+/** This class makes possible to connect to a remote host using ssh. */
 public class SSHUtils {
 
     /**

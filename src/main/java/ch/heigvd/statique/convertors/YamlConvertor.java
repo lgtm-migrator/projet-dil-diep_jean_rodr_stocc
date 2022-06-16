@@ -9,12 +9,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 
+/** This class generates a config object from the content of a YAML file. */
 public class YamlConvertor {
 
     /**
-     * Reads a YAML file to a Config object
+     * Creates a config object from the content of a YAML file
      *
-     * @param filepath File path
+     * @param filepath YAML file path
      * @return Config object
      * @throws IOException Couldn't load properties
      */

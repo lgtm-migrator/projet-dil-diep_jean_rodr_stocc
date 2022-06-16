@@ -14,9 +14,16 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.logging.Logger;
 
+/**
+ * This class creates a server locally hosted and gives the user the opportunity to connect to it
+ * using a browser.
+ */
 public class Server {
+    /** Where the server's logs are written */
     private static final Logger LOG = Logger.getLogger(Server.class.getName());
+    /** The path to the site folder */
     private final Path site;
+    /** The port on which the server has to listen */
     private final int port;
 
     /**
@@ -45,6 +52,7 @@ public class Server {
         LOG.info(" Server started on port " + port);
     }
 
+    /** This inner class handles http requests and gives responses */
     class MyHttpHandler implements HttpHandler {
 
         /**

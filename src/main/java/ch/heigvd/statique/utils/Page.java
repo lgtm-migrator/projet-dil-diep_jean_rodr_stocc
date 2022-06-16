@@ -11,11 +11,16 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 
+/** This class reads markdown file and generates html pages from it. */
 public class Page {
-    private Path fromPath;
-    private Path toPath;
+    /** The path to the markdown file */
+    private final Path fromPath;
+    /** The path to the HTML file */
+    private final Path toPath;
+    /** The page configuration */
     private Config pageConf;
-    private Template template;
+    /** The template */
+    private final Template template;
 
     /**
      * Page constructor.

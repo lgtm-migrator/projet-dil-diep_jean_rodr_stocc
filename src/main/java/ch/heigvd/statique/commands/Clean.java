@@ -10,12 +10,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.Callable;
 
-@Command(name = "clean", description = "Clean a statique site")
+/** This command deletes a static site's folder. */
+@Command(name = "clean", description = "Clean a static site")
 public class Clean implements Callable<Integer> {
 
+    /** The site to clean */
     @Parameters(paramLabel = "SITE", description = "The site to clean")
     public Path site;
 
+    /** Delete the given folder by calling deleteRecursive from utils. */
     @Override
     public Integer call() throws IOException {
         // Check that the site folder exists.
